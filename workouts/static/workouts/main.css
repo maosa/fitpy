@@ -1,46 +1,66 @@
 
-body {
+* {
+    margin: 0px;
+    padding: 0px;
+    line-style: none;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
     overflow-x: hidden;
 }
 
-#sidebar-wrapper {
-    min-height: 100vh;
-    margin-left: -15rem;
-    -webkit-transition: margin .25s ease-out;
-    -moz-transition: margin .25s ease-out;
-    -o-transition: margin .25s ease-out;
-    transition: margin .25s ease-out;
+/* SIDENAV */
+
+.sidenav {
+    left: 0px;
+    width: 250px;
+    height: 100%;
+    background: #3E3E3E;
+    position: fixed;
+    overflow: auto;
 }
 
-#sidebar-wrapper .sidebar-heading {
-    padding: 1rem 1.25rem;
-    font-size: 3rem;
+.sidenav header {
+    font-size: 28px;
     font-weight: bold;
+    color: #FFFFFF;
+    /* text-align: center; */
+    padding-left: 20px;
+    line-height: 80px;
+    background: #000000;
+    user-select: none
 }
 
-#sidebar-wrapper .list-group {
-    width: 15rem;
+.sidenav ul a{
+    font-size: 18px;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+    line-height: 70px;
+    color: #FFFFFF;
+    padding-left: 20px;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid #000000;
+    display: block;
 }
 
-#page-content-wrapper {
-    min-width: 100vw;
+/* Add space between icon and text */
+
+.sidenav ul a i {
+    margin-right: 10px
 }
 
-#wrapper.toggled #sidebar-wrapper {
-    margin-left: 0;
+/* Make sidenav items move with mouse hovering */
+
+.sidenav ul li:hover a {
+    padding-left: 35px
 }
 
-@media (min-width: 768px) {
-    #sidebar-wrapper {
-        margin-left: 0;
-    }
+/* MAIN PAGE */
 
-    #page-content-wrapper {
-        min-width: 0;
-        width: 100%;
-    }
-
-    #wrapper.toggled #sidebar-wrapper {
-        margin-left: -15rem;
-    }
+ #homepage {
+    height: 100%;
+    margin-left: 250px; /* same as navbar width */
+    padding: 50px;
+    background: #EEEEEE;
 }
