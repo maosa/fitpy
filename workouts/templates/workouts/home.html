@@ -1,8 +1,9 @@
 {% extends 'workouts/base.html' %}
-{% block content %}
-    {% for post in posts %}
-        <h1>{{ post.title }}</h1>
-        <p>By {{ post.autor }} on {{post.date_posted }}</p>
-        <p>{{ post.content }}</p>
-    {% endfor %}
-{% endblock content %}
+{% block workout_log %}
+    {{workouts | safe}}
+
+    <!-- {% for workout in workouts %}
+        <li>{{ workout.No }}) Date: {{ workout.Date }}, Type: {{ workout.Workout }}</li>
+    {% endfor %} -->
+
+{% endblock workout_log %}

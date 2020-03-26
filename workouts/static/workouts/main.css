@@ -1,3 +1,9 @@
+/* Globally defined variables */
+
+:root {
+    --sidenav_width: 250px;
+    --homepage_margin: 50px;
+}
 
 * {
     margin: 0px;
@@ -14,18 +20,19 @@ body {
     background-color: #F0F0F0;
 }
 
-/* SIDENAV */
+/* #################### SIDENAV #################### */
 
-.sidenav {
+#sidenav {
     left: 0px;
-    width: 250px;
+    width: var(--sidenav_width);
+    /* width: 100%; */
     height: 100%;
     background: #3E3E3E;
     position: fixed;
     overflow: auto;
 }
 
-.sidenav header {
+#sidenav_header {
     font-size: 30px;
     font-weight: bold;
     color: #FFFFFF;
@@ -36,7 +43,7 @@ body {
     user-select: none
 }
 
-.sidenav ul a{
+#sidenav ul a {
     font-size: 20px;
     height: 100%;
     width: 100%;
@@ -50,22 +57,24 @@ body {
     display: block;
 }
 
-/* Add space between icon and text */
+/* Add space between the icon and the text in the sidenav items */
 
-.sidenav ul a i {
+#sidenav ul a i {
     margin-right: 10px
 }
 
-/* Make sidenav items move with mouse hovering */
+/* Make sidenav items move/jump with mouse hovering */
 
-.sidenav ul li:hover a {
+#sidenav ul li:hover a {
     padding-left: 35px
 }
 
-/* MAIN PAGE */
+/* #################### MAIN PAGE #################### */
 
 #homepage {
     height: 100%;
-    margin-left: 250px; /* same as navbar width */
-    padding: 50px;
+    /* padding: 50px; */
+    margin-left: calc(var(--sidenav_width) + var(--homepage_margin)); /* same as sidenav width */
+    margin-top: var(--homepage_margin);
+    margin-right: var(--homepage_margin);
 }

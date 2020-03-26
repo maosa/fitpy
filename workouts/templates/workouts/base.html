@@ -26,48 +26,59 @@
 
 <body>
 
-    <!-- ################################################################################ -->
-    <!-- ################################################################################ -->
+    <!-- main_container -->
+    <div class='container-fluid' id='main_container'>
 
-    <!-- Sidebar -->
-    <div class='sidenav' id='sidenav'>
+        <!-- main_row -->
+        <div class='row' id='main_row'>
 
-        <!-- Sidebar title -->
-        <header id='sidenav_header'>
-            FitPy
-        </header>
+            <!-- Sidenav -->
+            <div class='sidenav' id='sidenav'>
 
-        <!-- Sidebar items -->
-        <ul id='sidenav_items'>
+                <header id='sidenav_header'>
+                    FitPy
+                </header>
 
-            <li>
-                <a href="{% url 'fitpy-home' %}"><i class="fa fa-home"></i>Home</a>
-            </li>
+                <!-- Sidenav items -->
+                <ul id='sidenav_items'>
 
-            <li>
-                <a href="{% url 'fitpy-running' %}"><i class="fa fa-running"></i>Running</a>
-            </li>
+                    <li>
+                        <a href="{% url 'fitpy-home' %}"><i class="fa fa-home"></i>Home</a>
+                    </li>
 
-            <li>
-                <a href='#'><i class="fa fa-chart-pie"></i>Statistics</a>
-            </li>
+                    <li>
+                        <a href="{% url 'fitpy-running' %}"><i class="fa fa-running"></i>Running</a>
+                    </li>
 
-        </ul>
+                    <li>
+                        <a href='#'><i class="fa fa-chart-pie"></i>Statistics</a>
+                    </li>
+
+                </ul>
+                <!-- sidenav_items -->
+
+            </div>
+            <!-- sidenav -->
+
+            <!-- homepage -->
+            <div class='main' id='homepage'>
+
+                <!-- <h1 style='font-weight: bold'>
+                    Workout log
+                </h1> -->
+
+                {% block workout_log %}{% endblock %}
+
+            </div>
+            <!-- homepage -->
+
+        </div>
+        <!-- main_row -->
 
     </div>
+    <!-- main_container -->
 
-    <!-- ################################################################################ -->
-    <!-- ################################################################################ -->
 
-    <!-- Page Content -->
-    <div class='main' id='homepage'>
-
-        {% block content %}{% endblock %}
-
-    </div>
-
-    <!-- ################################################################################ -->
-    <!-- ################################################################################ -->
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
