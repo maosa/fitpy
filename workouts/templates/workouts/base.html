@@ -41,11 +41,11 @@
         <ul id='sidenav_items'>
 
             <li>
-                <a href='#'><i class="fa fa-home"></i>Workouts</a>
+                <a href="{% url 'fitpy-home' %}"><i class="fa fa-home"></i>Home</a>
             </li>
 
             <li>
-                <a href='#'><i class="fa fa-heartbeat"></i>Running</a>
+                <a href="{% url 'fitpy-running' %}"><i class="fa fa-running"></i>Running</a>
             </li>
 
             <li>
@@ -55,6 +55,9 @@
         </ul>
 
     </div>
+
+    <!-- ################################################################################ -->
+    <!-- ################################################################################ -->
 
     <!-- Page Content -->
     <div class='main' id='homepage'>

@@ -8,6 +8,12 @@
     overflow-x: hidden;
 }
 
+/* We're working with the body tag, and so with the WHOLE page */
+
+body {
+    background-color: #F0F0F0;
+}
+
 /* SIDENAV */
 
 .sidenav {
@@ -20,24 +26,24 @@
 }
 
 .sidenav header {
-    font-size: 28px;
+    font-size: 30px;
     font-weight: bold;
     color: #FFFFFF;
     /* text-align: center; */
-    padding-left: 20px;
     line-height: 80px;
     background: #000000;
+    padding-left: 20px;
     user-select: none
 }
 
 .sidenav ul a{
-    font-size: 18px;
+    font-size: 20px;
     height: 100%;
     width: 100%;
-    text-decoration: none;
-    line-height: 70px;
+    line-height: 80px;
     color: #FFFFFF;
     padding-left: 20px;
+    text-decoration: none;
     box-sizing: border-box;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid #000000;
@@ -58,9 +64,8 @@
 
 /* MAIN PAGE */
 
- #homepage {
+#homepage {
     height: 100%;
     margin-left: 250px; /* same as navbar width */
     padding: 50px;
-    background: #EEEEEE;
 }

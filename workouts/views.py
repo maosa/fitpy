@@ -23,8 +23,7 @@ posts = [
 def home(request):
 
     context = {
-        'posts' : posts,
-        'title' : 'TEST'
+        'posts' : posts
     }
 
     return render(request, 'workouts/home.html', context)
