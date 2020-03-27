@@ -13,6 +13,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    <!-- DataTables -->
+    <link rel='stylesheet' href='https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css'>
+
     <!-- To use font awesome icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
@@ -63,10 +66,7 @@
             <!-- homepage -->
             <div class='main' id='homepage'>
 
-                <!-- <h1 style='font-weight: bold'>
-                    Workout log
-                </h1> -->
-
+                <!-- Workout log -->
                 {% block workout_log %}{% endblock %}
 
             </div>
@@ -85,6 +85,67 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- DataTables JS -->
+    <script src='https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'></script>
+    <script src='https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js'></script>
+
+    <!-- DataTable JS script -->
+    <!-- Style the workout log table -->
+    <script>
+        $('#workout_log').DataTable(
+            {
+                'info': false,
+                'pagingType': 'full_numbers',
+                'lengthChange': false,
+                'order': [[ 1, 'desc' ]],
+                'columnDefs': [
+                    {
+                        'targets': [ 4 ],
+                        'visible': false,
+                        'searchable': true
+                    }
+                ],
+                'rowCallback': function(row, data) {
+
+                    if (data[4] == "chest") {
+
+                        $('td', row).css('background-color', 'rgba(255, 0, 0, 0.6)'); // red
+
+                    } else if (data[4] == "back") {
+
+                        $('td', row).css('background-color', 'rgba(0, 128, 255, 0.5)'); //blue
+
+                    } else if (data[4] == "legs") {
+
+                        $('td', row).css('background-color', 'rgba(255, 224, 128, 0.5)'); // cream
+
+                    } else if (data[4] == "compound") {
+
+                        $('td', row).css('background-color', 'rgba(0, 0, 128, 0.5)'); // navy
+
+                    } else if (data[4] == "cardio") {
+
+                        $('td', row).css('background-color', 'rgba(128, 255, 255, 0.5)'); // cyan
+
+                    } else if (data[4] == "other") {
+
+                        $('td', row).css('background-color', 'rgba(255, 160, 255, 0.5)'); // pink
+
+                    } else if (data[4] == "double_workout") {
+
+                        $('td', row).css('background-color', 'rgba(128, 0, 128, 0.5)'); // purple
+
+                    } else if (data[4] == "rest") {
+
+                        $('td', row).css('background-color', 'rgba(0, 0, 0, 0.25)'); // grey
+
+                    }
+
+                } // rowCallback
+            } // workout_log options and styling
+        );
+    </script>
 
 </body>
 

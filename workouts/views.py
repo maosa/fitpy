@@ -14,18 +14,15 @@ def home(request):
 
     # Convert the data frame to a list of dictionaries where
     # each dictionary in the list is a data frame row
-    # Note: This is only used if one wants to loop over the data frame's rows
-    # If the code on the next line is used, then use {{workouts | safe}} in home.html
-    # to display to table
+    # Note: This is used if one wants to loop over the data frame's rows
 
-    # workouts = data.to_dict(orient='records')
+    workouts_cols = data.columns
 
-    # Alternatively, just convert the data frame to HTML
-
-    workouts = data.to_html(classes='table table-dark')
+    workouts = data.to_dict(orient='records')
 
     context = {
-        'workouts' : workouts
+        'workouts' : workouts,
+        'workouts_cols' : workouts_cols
     }
 
     return render(request, 'workouts/home.html', context)

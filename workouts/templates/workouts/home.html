@@ -1,9 +1,28 @@
 {% extends 'workouts/base.html' %}
 {% block workout_log %}
-    {{workouts | safe}}
 
-    <!-- {% for workout in workouts %}
-        <li>{{ workout.No }}) Date: {{ workout.Date }}, Type: {{ workout.Workout }}</li>
-    {% endfor %} -->
+    <table class='table' align='center' id='workout_log'>
+
+        <thead>
+            <tr>
+                {% for col in workouts_cols %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for row in workouts %}
+            <tr>
+                <td>{{ row.no }}</td>
+                <td>{{ row.date }}</td>
+                <td>{{ row.workout }}</td>
+                <td>{{ row.duration }}</td>
+                <td>{{ row.category }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
 
 {% endblock workout_log %}
