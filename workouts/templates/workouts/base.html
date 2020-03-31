@@ -9,21 +9,18 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- DataTables -->
-    <link rel='stylesheet' href='https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css'>
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- To use font awesome icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-
     <!-- Load the .css file from the static directory -->
     <link rel='stylesheet' type='text/css' href="{% static 'workouts/main.css' %}">
-
-    <!-- Use this instead during development -->
-    <!-- <link rel='stylesheet' type='text/css' href="../../static/workouts/main.css"> -->
+    <!-- DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
+    <!-- Include plotly.js -->
+    <!-- For this to work we need include_plotlyjs=False in plot() -->
+    <!-- https://www.codingwithricky.com/2019/08/28/easy-django-plotly/ -->
+    <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
 </head>
 
@@ -53,9 +50,9 @@
                         <a href="{% url 'fitpy-running' %}"><i class="fa fa-running"></i>Running</a>
                     </li>
 
-                    <li>
+                    <!-- <li>
                         <a href='#'><i class="fa fa-chart-pie"></i>Statistics</a>
-                    </li>
+                    </li> -->
 
                 </ul>
                 <!-- sidenav_items -->
@@ -69,6 +66,15 @@
                 <!-- Workout log -->
                 {% block workout_log %}{% endblock %}
 
+                <!-- Graphs and plots -->
+                {% block workout_plots %}{% endblock %}
+
+                <!-- Running log -->
+                {% block run_log %}{% endblock %}
+
+                <!-- Graphs and plots -->
+                {% block run_plots %}{% endblock %}
+
             </div>
             <!-- homepage -->
 
@@ -78,73 +84,84 @@
     </div>
     <!-- main_container -->
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <!-- DataTables -->
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-    <!-- DataTables JS -->
-    <script src='https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js'></script>
-    <script src='https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js'></script>
-
-    <!-- DataTable JS script -->
-    <!-- Style the workout log table -->
-    <script>
-        $('#workout_log').DataTable(
-            {
-                'info': false,
-                'pagingType': 'full_numbers',
-                'lengthChange': false,
-                'order': [[ 1, 'desc' ]],
-                'columnDefs': [
+    <!-- workout_log DataTable -->
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $('#workout_log').DataTable({
+                'pageLength' : 10,
+                'info' : false,
+                'pagingType' : 'full_numbers',
+                'lengthChange' : false,
+                'order' : [[ 0, 'desc' ]],
+                // Hide particular columns
+                'columnDefs' : [
                     {
-                        'targets': [ 4 ],
-                        'visible': false,
-                        'searchable': true
+                        'targets' : [4],
+                        'visible' : false,
+                        'searchable' : true
                     }
                 ],
-                'rowCallback': function(row, data) {
-
+                // Highlight rows based on workout category
+                'rowCallback' : function(row, data) {
+                    // https://graf1x.com/shades-of-blue-color-palette/
                     if (data[4] == "chest") {
-
-                        $('td', row).css('background-color', 'rgba(255, 0, 0, 0.6)'); // red
-
+                        $('td', row).css('background-color', 'rgba(17, 30, 108, 1)'); // royal
                     } else if (data[4] == "back") {
-
-                        $('td', row).css('background-color', 'rgba(0, 128, 255, 0.5)'); //blue
-
+                        $('td', row).css('background-color', 'rgba(29, 41, 81, 1)'); // space
                     } else if (data[4] == "legs") {
-
-                        $('td', row).css('background-color', 'rgba(255, 224, 128, 0.5)'); // cream
-
+                        // $('td', row).css('background-color', 'rgba(0, 49, 82, 1)'); // prussian
+                        $('td', row).css('background-color', 'rgba(0, 142, 204, 1)'); // olympic
                     } else if (data[4] == "compound") {
-
-                        $('td', row).css('background-color', 'rgba(0, 0, 128, 0.5)'); // navy
-
+                        // $('td', row).css('background-color', 'rgba(0, 0, 128, 1)'); // navy
+                        $('td', row).css('background-color', 'rgba(76, 81, 109, 1)'); // independence
                     } else if (data[4] == "cardio") {
-
-                        $('td', row).css('background-color', 'rgba(128, 255, 255, 0.5)'); // cyan
-
+                        $('td', row).css('background-color', 'rgba(16, 52, 166, 1)'); // egyptian
                     } else if (data[4] == "other") {
-
-                        $('td', row).css('background-color', 'rgba(255, 160, 255, 0.5)'); // pink
-
+                        $('td', row).css('background-color', 'rgba(0, 128, 255, 1)'); // azure
                     } else if (data[4] == "double_workout") {
-
-                        $('td', row).css('background-color', 'rgba(128, 0, 128, 0.5)'); // purple
-
-                    } else if (data[4] == "rest") {
-
-                        $('td', row).css('background-color', 'rgba(0, 0, 0, 0.25)'); // grey
-
+                        $('td', row).css('background-color', 'rgba(101, 147, 245, 1)'); // cornflower
                     }
-
                 } // rowCallback
-            } // workout_log options and styling
-        );
+                // 'initComplete': function(){
+                //     $('#workout_log').show();
+                // }
+            }); // workout_log DataTable
+            $('#workout_log').show(); // an alternative to initComplete
+        }); // function
+    </script>
+
+    <!-- run_log DataTable -->
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $('#run_log').DataTable({
+                'pageLength' : 10,
+                'info' : false,
+                'searching': false,
+                'pagingType' : 'full_numbers',
+                'lengthChange' : false,
+                'order' : [[ 0, 'desc' ]],
+                'headers' : ['No', 'Date', 'Distance (km)', 'Duration (mins)', 'Pace (mins/km)'],
+                // Highlight rows based on workout category
+                'rowCallback' : function(row, data) {
+                    // https://graf1x.com/shades-of-blue-color-palette/
+                    if (data[4] <= 5 || data[2] >= 8) {
+                        $('td', row).css('background-color', 'rgba(56, 20, 96, 0.5)');
+                    } else if (data[4] > 5 || data[2] < 8) {
+                        $('td', row).css('background-color', 'rgba(178, 31, 102, 0.5)');
+                    }
+                } // rowCallback
+            }); // run_log DataTable
+            $('#run_log').show();
+        }); // function
     </script>
 
 </body>

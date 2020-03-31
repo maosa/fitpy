@@ -19,6 +19,7 @@
 
 body {
     background-color: #F0F0F0;
+    /* background-color: #FFFFFF; */
 }
 
 /* #################### SIDENAV #################### */
@@ -80,6 +81,8 @@ body {
     margin-top: 0px; /* or var(--sidenav_head_height) */
 }
 
+/* #################### WORKOUT LOG #################### */
+
 #workout_log {
     height: auto;
     width: 100%;
@@ -88,8 +91,9 @@ body {
     /* border: 1px solid #000000; */
     text-align: center;
     vertical-align: middle;
-    background-color: #FFFFFF;
+    /* background-color: #000000; */
     border-collapse: collapse;
+    display: none;
 }
 
 #workout_log th {
@@ -97,4 +101,32 @@ body {
     color: #FFFFFF;
     font-weight: bold;
     text-transform: capitalize;
+}
+
+#workout_log tr {
+    color: #FFFFFF;
+}
+
+/* #################### RUN LOG #################### */
+
+#run_log {
+    height: auto;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+    vertical-align: middle;
+    border-collapse: collapse;
+    display: none;
+}
+
+#run_log th {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+#run_log tr {
+    color: #000000;
 }

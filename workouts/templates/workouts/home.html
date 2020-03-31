@@ -1,28 +1,56 @@
 {% extends 'workouts/base.html' %}
+
 {% block workout_log %}
 
-    <table class='table' align='center' id='workout_log'>
+    <div class='w-100' id='workout_log_row'>
 
-        <thead>
-            <tr>
-                {% for col in workouts_cols %}
-                    <th>{{ col }}</th>
+        <table class='table' id='workout_log'>
+
+            <thead>
+                <tr>
+                    {% for col in data_filt_cols %}
+                        <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in data_filt %}
+                <tr>
+                    <td>{{ row.no }}</td>
+                    <td>{{ row.date }}</td>
+                    <td>{{ row.workout }}</td>
+                    <td>{{ row.duration }}</td>
+                    <td>{{ row.category }}</td>
+                    <td>{{ row.daydelta }}</td>
+                </tr>
                 {% endfor %}
-            </tr>
-        </thead>
+            </tbody>
 
-        <tbody>
-            {% for row in workouts %}
-            <tr>
-                <td>{{ row.no }}</td>
-                <td>{{ row.date }}</td>
-                <td>{{ row.workout }}</td>
-                <td>{{ row.duration }}</td>
-                <td>{{ row.category }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+        </table>
 
-    </table>
+    </div>
 
 {% endblock workout_log %}
+
+<!-- Graphs and plots -->
+
+{% block workout_plots %}
+
+    <div class='w-100' id='wd_div'>
+
+        {% autoescape off %}
+            {{ fig_div }}
+        {% endautoescape %}
+
+    </div>
+
+    <div class='w-100' id='pie_charts'>
+
+        {% autoescape off %}
+            {{ pie_plots_div }}
+        {% endautoescape %}
+
+    </div>
+
+{% endblock workout_plots %}

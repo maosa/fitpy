@@ -1,4 +1,47 @@
 {% extends 'workouts/base.html' %}
-{% block content %}
-    <h1>Runs</h1>
-{% endblock content %}
+
+{% block run_log %}
+
+    <div class='w-100' id='run_log_row'>
+
+        <table class='table' id='run_log'>
+
+            <thead>
+                <tr>
+                    {% for col in run_cols %}
+                        <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in run %}
+                <tr>
+                    <td>{{ row.no }}</td>
+                    <td>{{ row.date }}</td>
+                    <td>{{ row.distance }}</td>
+                    <td>{{ row.duration }}</td>
+                    <td>{{ row.pace }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+
+{% endblock run_log %}
+
+<!-- Graphs and plots -->
+
+{% block run_plots %}
+
+    <div class='w-100' id='run_plots_div'>
+
+        {% autoescape off %}
+            {{ fig_div }}
+        {% endautoescape %}
+
+    </div>
+
+{% endblock run_plots %}
