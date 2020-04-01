@@ -21,9 +21,45 @@ def home(request):
 
     data_filt = pd.read_csv('/Users/maosa/fitpy/data_filt.csv', sep=',')
 
+    run = pd.read_csv('/Users/maosa/fitpy/run.csv', sep=',') # only needed for stats
+
     # Convert the date column to datetime
 
+    data['date'] = pd.to_datetime(data['date'], format='%Y-%m-%d')
+
     data_filt['date'] = pd.to_datetime(data_filt['date'], format='%Y-%m-%d')
+
+    ######################################################################
+
+    # Stats
+
+    if ((datetime.date(data['date'].iloc[-1]) - datetime.date(data['date'].iloc[0])).days + 1 == len(data)):
+        days = len(data)
+
+    workouts_tracked = len(data[
+        ((data['workout'] != 'Rest') & (data['category'] != 'rest')) & (data['duration'] != 0)
+    ])
+
+    total_runs = len(run)
+
+    runs_ratio = round((total_runs/workouts_tracked)*100, 2)
+
+    rest_days = len(data[
+        ((data['workout'] == 'Rest') & (data['category'] == 'rest')) & (data['duration'] == 0)
+    ])
+
+    rest_days_prop = round((rest_days/days)*100, 2)
+
+    stats = [{
+        'from' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[0],
+        'to' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[-1],
+        'days' : days,
+        'workouts_tracked' : workouts_tracked,
+        'total_runs' : total_runs,
+        'runs_ratio' : runs_ratio,
+        'rest_days' : rest_days,
+        'rest_days_prop' : rest_days_prop
+    }]
 
     ######################################################################
 
@@ -48,7 +84,7 @@ def home(request):
         ],
         subplot_titles=('Duration per workout',
                         'Day difference between workouts',
-                        'Duration difference between workouts',
+                        'Duration change between workouts',
                         'Average workout time per week',
                         'Average workout time per month',
                         'Average workout time per year'),
@@ -234,6 +270,8 @@ def home(request):
 
     ######################################################################
 
+    # Pie charts
+
     pie_plots = make_subplots(
         rows=1,
         cols=2,
@@ -285,17 +323,18 @@ def home(request):
     # Note: This is used if one wants to loop over the data frame's rows
     # Run this just before the context dictionary is defined!
 
-    # Convert date column from datetime to string
+    # Modify date column
 
     data_filt['date'] = data_filt['date'].dt.strftime('%a, %d-%b-%Y')
 
     # Remove unnecessary columns
 
-    data_filt.drop(labels=['duration_diff', 'year', 'month', 'week', 'day'], axis=1, inplace=True)
+    data_filt.drop(labels=['daydelta', 'duration_diff', 'year', 'month', 'week', 'day'],
+                   axis=1, inplace=True)
 
     # Get colnames
 
-    data_filt_cols = data_filt.columns
+    # data_filt_cols = data_filt.columns
 
     # Convert data frame to dictionary
 
@@ -304,13 +343,16 @@ def home(request):
     ######################################################################
 
     context = {
-        'data_filt_cols' : data_filt_cols,
+        'stats' : stats,
+        # 'data_filt_cols' : data_filt_cols,
         'data_filt' : data_filt,
         'fig_div' : fig_div,
         'pie_plots_div' : pie_plots_div
     }
 
     return render(request, 'workouts/home.html', context)
+
+
 
 # Running page
 

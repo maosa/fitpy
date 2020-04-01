@@ -2,7 +2,7 @@
 
 :root {
     --sidenav_width: 250px;
-    --sidenav_head_height: 80px;
+    --sidenav_head_height: 100px;
     --homepage_margin: 50px;
 }
 
@@ -81,6 +81,30 @@ body {
     margin-top: 0px; /* or var(--sidenav_head_height) */
 }
 
+/* #################### STATS #################### */
+
+#stats {
+    height: auto;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: #3E3E3E;
+    text-align: center;
+    vertical-align: middle;
+    border-collapse: collapse;
+}
+
+#stats th {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+#stats tr {
+    color: #FFFFFF;
+    /* font-weight: bold; */
+}
+
 /* #################### WORKOUT LOG #################### */
 
 #workout_log {
@@ -100,7 +124,7 @@ body {
     background-color: #000000;
     color: #FFFFFF;
     font-weight: bold;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
 }
 
 #workout_log tr {
@@ -124,7 +148,7 @@ body {
     background-color: #000000;
     color: #FFFFFF;
     font-weight: bold;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
 }
 
 #run_log tr {

@@ -1,5 +1,52 @@
 {% extends 'workouts/base.html' %}
 
+<!-- Stats -->
+
+{% block stats %}
+
+    <div class='w-100' id='stats_row'>
+
+        <table class='table' id='stats'>
+
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Days</th>
+                    <th>Workouts tracked</th>
+                    <th>Runs (count)</th>
+                    <th>Runs (%)</th>
+                    <th>Rest days (count)</th>
+                    <th>Rest days (%)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in stats %}
+                <tr>
+                    <td>{{ row.from }}</td>
+                    <td>{{ row.to }}</td>
+                    <td>{{ row.days }}</td>
+                    <td>{{ row.workouts_tracked }}</td>
+                    <td>{{ row.total_runs }}</td>
+                    <td>{{ row.runs_ratio }}</td>
+                    <td>{{ row.rest_days }}</td>
+                    <td>{{ row.rest_days_prop }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+        <br>
+        <br>
+
+    </div>
+
+{% endblock stats %}
+
+<!-- Workout log -->
+
 {% block workout_log %}
 
     <div class='w-100' id='workout_log_row'>
@@ -8,9 +55,13 @@
 
             <thead>
                 <tr>
-                    {% for col in data_filt_cols %}
+                    <!-- {% for col in data_filt_cols %}
                         <th>{{ col }}</th>
-                    {% endfor %}
+                    {% endfor %} -->
+                    <th>No</th>
+                    <th>Date</th>
+                    <th>Workout</th>
+                    <th>Duration (mins)</th>
                 </tr>
             </thead>
 
@@ -22,12 +73,14 @@
                     <td>{{ row.workout }}</td>
                     <td>{{ row.duration }}</td>
                     <td>{{ row.category }}</td>
-                    <td>{{ row.daydelta }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
 
         </table>
+
+        <br>
+        <br>
 
     </div>
 
