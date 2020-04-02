@@ -39,7 +39,6 @@
         </table>
 
         <br>
-        <br>
 
     </div>
 
@@ -79,9 +78,6 @@
 
         </table>
 
-        <br>
-        <br>
-
     </div>
 
 {% endblock workout_log %}
@@ -90,7 +86,7 @@
 
 {% block workout_plots %}
 
-    <div class='w-100' id='wd_div'>
+    <div class='w-100' id='wd_row'>
 
         {% autoescape off %}
             {{ fig_div }}
@@ -98,7 +94,7 @@
 
     </div>
 
-    <div class='w-100' id='pie_charts'>
+    <div class='w-100' id='pie_charts_row'>
 
         {% autoescape off %}
             {{ pie_plots_div }}

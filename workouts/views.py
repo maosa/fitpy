@@ -368,6 +368,204 @@ def running(request):
 
     run['date'] = pd.to_datetime(run['date'], format='%Y-%m-%d')
 
+    # Generate run plots
+
+    # Calculate variables needed for the plots
+
+    first_date = run['date'].iloc[0]
+    last_date = run['date'].iloc[-1]
+    mean_distance = run['distance'].mean()
+    mean_duration = run['duration'].mean()
+    mean_pace = run['pace'].mean()
+
+    run_plots = make_subplots(
+        rows=3,
+        cols=1,
+        specs=[
+            [{}],
+            [{}],
+            [{}]
+        ],
+        subplot_titles=('Distance per run',
+                        'Duration per run',
+                        'Pace per run'),
+        vertical_spacing=0.1
+    )
+
+    # Plot 1
+
+    run_plots.add_trace(
+        go.Scatter(
+            x=run['date'],
+            y=run['distance'],
+            mode='lines',
+            name='',
+            line=dict(width=1),
+            showlegend=False
+        ),
+        row=1,
+        col=1
+    )
+
+    # Horizontal line at average (plot 1)
+
+    run_plots.add_shape(
+        type='line',
+        x0=first_date,
+        y0=mean_distance,
+        x1=last_date,
+        y1=mean_distance,
+        line=dict(
+            color='#000000',
+            width=1,
+            dash='dash',
+        ),
+        row=1,
+        col=1
+    )
+
+    # Add text on the horizontal line (plot 1)
+
+    run_plots.add_trace(
+        go.Scatter(
+            x=[last_date - pd.DateOffset(60)],
+            y=[mean_distance + 0.5],
+            text=[round(mean_distance, 2)],
+            textposition='top left',
+            mode="text",
+            showlegend=False,
+            hoverinfo='none'
+        ),
+        row=1,
+        col=1
+    )
+
+    # Plot 2
+
+    run_plots.add_trace(
+        go.Scatter(
+            x=run['date'],
+            y=run['duration'],
+            mode='lines',
+            name='',
+            line=dict(width=1),
+            showlegend=False
+        ),
+        row=2,
+        col=1
+    )
+
+    # Horizontal line at average (plot 2)
+
+    run_plots.add_shape(
+        type='line',
+        x0=first_date,
+        y0=mean_duration,
+        x1=last_date,
+        y1=mean_duration,
+        line=dict(
+            color='#000000',
+            width=1,
+            dash='dash',
+        ),
+        row=2,
+        col=1
+    )
+
+    # Add text on the horizontal line (plot 2)
+
+    run_plots.add_trace(
+        go.Scatter(
+            x=[last_date - pd.DateOffset(60)],
+            y=[mean_duration + 2],
+            text=[round(mean_duration, 2)],
+            textposition='top left',
+            mode="text",
+            showlegend=False,
+            hoverinfo='none'
+        ),
+        row=2,
+        col=1
+    )
+
+    # Plot 3
+
+    run_plots.add_trace(
+        go.Scatter(
+            x=run['date'],
+            y=run['pace'],
+            mode='lines',
+            name='',
+            line=dict(width=1),
+            showlegend=False
+        ),
+        row=3,
+        col=1
+    )
+
+    # Horizontal line at average (plot 3)
+
+    run_plots.add_shape(
+        type='line',
+        x0=first_date,
+        y0=mean_pace,
+        x1=last_date,
+        y1=mean_pace,
+        line=dict(
+            color='#000000',
+            width=1,
+            dash='dash',
+        ),
+        row=3,
+        col=1
+    )
+
+    # Add text on the horizontal line (plot 3)
+
+    run_plots.add_trace(
+        go.Scatter(
+            x=[last_date - pd.DateOffset(60)],
+            y=[mean_pace + 0.05],
+            text=[round(mean_pace, 2)],
+            textposition='top left',
+            mode="text",
+            showlegend=False,
+            hoverinfo='none'
+        ),
+        row=3,
+        col=1
+    )
+
+    # Update xaxis properties
+
+    run_plots.update_xaxes(title_text='Date', row=3, col=1)
+
+    # Update yaxis properties
+
+    run_plots.update_yaxes(title_text='Distance (km)', row=1, col=1)
+
+    run_plots.update_yaxes(title_text='Duration (mins)', row=2, col=1)
+
+    run_plots.update_yaxes(title_text='Pace (mins/km)', row=3, col=1)
+
+    # Update layout
+
+    run_plots.update_layout(
+        height=900,
+        font=dict(
+            family='Helvetica, monospace',
+            size=16,
+            color="#000000"
+        )
+    )
+
+    run_plots_div = plot(
+        run_plots,
+        output_type='div',
+        show_link=False,
+        link_text=''
+    )
+
     # Convert date column from datetime to string
 
     run['date'] = run['date'].dt.strftime('%a, %d-%b-%Y')
@@ -384,7 +582,8 @@ def running(request):
 
     context = {
         'run_cols' : run_cols,
-        'run' : run
+        'run' : run,
+        'run_plots_div' : run_plots_div
     }
 
     return render(request, 'workouts/running.html', context)
