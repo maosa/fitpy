@@ -35,30 +35,35 @@ def home(request):
 
     if ((datetime.date(data['date'].iloc[-1]) - datetime.date(data['date'].iloc[0])).days + 1 == len(data)):
         days = len(data)
+    else:
+        days = 'ERROR'
 
-    workouts_tracked = len(data[
+    workouts = len(data[
         ((data['workout'] != 'Rest') & (data['category'] != 'rest')) & (data['duration'] != 0)
     ])
 
-    total_runs = len(run)
+    workouts_prop = round((workouts/days)*100, 2)
 
-    runs_ratio = round((total_runs/workouts_tracked)*100, 2)
-
-    rest_days = len(data[
+    rest = len(data[
         ((data['workout'] == 'Rest') & (data['category'] == 'rest')) & (data['duration'] == 0)
     ])
 
-    rest_days_prop = round((rest_days/days)*100, 2)
+    rest_prop = round((rest/days)*100, 2)
+
+    runs = len(run)
+
+    runs_prop = round((runs/days)*100, 2)
 
     stats = [{
         'from' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[0],
         'to' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[-1],
         'days' : days,
-        'workouts_tracked' : workouts_tracked,
-        'total_runs' : total_runs,
-        'runs_ratio' : runs_ratio,
-        'rest_days' : rest_days,
-        'rest_days_prop' : rest_days_prop
+        'workouts' : workouts,
+        'workouts_prop' : workouts_prop,
+        'rest' : rest,
+        'rest_prop' : rest_prop,
+        'runs' : runs,
+        'runs_prop' : runs_prop
     }]
 
     ######################################################################
