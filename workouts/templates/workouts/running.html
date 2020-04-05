@@ -1,5 +1,51 @@
 {% extends 'workouts/base.html' %}
 
+<!-- Running stats -->
+
+{% block running_stats %}
+
+    <div class='w-100' id='stats_row'>
+
+        <table class='table' id='running_stats'>
+
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Days</th>
+                    <th>Runs (count)</th>
+                    <th>Runs (%)</th>
+                    <th>Average distance (km)</th>
+                    <th>Average duration (mins)</th>
+                    <th>Average pace (mins/km)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in stats %}
+                <tr>
+                    <td>{{ row.from }}</td>
+                    <td>{{ row.to }}</td>
+                    <td>{{ row.days }}</td>
+                    <td>{{ row.runs }}</td>
+                    <td>{{ row.runs_prop }}</td>
+                    <td>{{ row.mean_dist }}</td>
+                    <td>{{ row.mean_dur }}</td>
+                    <td>{{ row.mean_pace }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+        <br>
+
+    </div>
+
+{% endblock running_stats %}
+
+<!-- Running log -->
+
 {% block run_log %}
 
     <div class='w-100' id='run_log_row'>
@@ -8,10 +54,6 @@
 
             <thead>
                 <tr>
-                    <!-- {% for col in run_cols %}
-                        <th>{{ col }}</th>
-                    {% endfor %} -->
-
                     <th>No</th>
                     <th>Date</th>
                     <th>Distance (km)</th>

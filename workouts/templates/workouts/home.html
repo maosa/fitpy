@@ -2,11 +2,11 @@
 
 <!-- Stats -->
 
-{% block stats %}
+{% block workout_stats %}
 
     <div class='w-100' id='stats_row'>
 
-        <table class='table' id='stats'>
+        <table class='table' id='workout_stats'>
 
             <thead>
                 <tr>
@@ -44,7 +44,7 @@
 
     </div>
 
-{% endblock stats %}
+{% endblock workout_stats %}
 
 <!-- Workout log -->
 
@@ -56,9 +56,30 @@
 
             <thead>
                 <tr>
-                    <!-- {% for col in data_filt_cols %}
-                        <th>{{ col }}</th>
-                    {% endfor %} -->
+                    <th>No</th>
+                    <th>Date</th>
+                    <th>Workout</th>
+                    <th>Duration (mins)</th>
+                    <th>Category</th>
+                    <th>User</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in test %}
+                <tr>
+                    <td>{{ row.no }}</td>
+                    <td>{{ row.date|date:"D, d-M-Y" }}</td>
+                    <td>{{ row.workout }}</td>
+                    <td>{{ row.duration }}</td>
+                    <td>{{ row.category }}</td>
+                    <td>{{ row.user }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+            <!-- <thead>
+                <tr>
                     <th>No</th>
                     <th>Date</th>
                     <th>Workout</th>
@@ -67,16 +88,17 @@
             </thead>
 
             <tbody>
-                {% for row in data_filt %}
+                {% for row in workouts %}
                 <tr>
                     <td>{{ row.no }}</td>
                     <td>{{ row.date }}</td>
                     <td>{{ row.workout }}</td>
                     <td>{{ row.duration }}</td>
                     <td>{{ row.category }}</td>
+                    <td>{{ row.user }}</td>
                 </tr>
                 {% endfor %}
-            </tbody>
+            </tbody> -->
 
         </table>
 

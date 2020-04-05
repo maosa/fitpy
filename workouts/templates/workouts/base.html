@@ -9,14 +9,32 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Load the .css files from the static directory -->
+    <link rel='stylesheet' type='text/css' href="{% static 'workouts/main.css' %}">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
     <!-- To use font awesome icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <!-- Load the .css file from the static directory -->
-    <link rel='stylesheet' type='text/css' href="{% static 'workouts/main.css' %}">
+
+    <!-- Favicon -->
+    <!-- https://favicon.io/emoji-favicons/ -->
+    <!-- <link rel="shortcut icon" type="image/png" href="{% static 'running_favicon/favicon.ico' %}"> -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'lifting_favicon/favicon.ico' %}">
+
     <!-- DataTables -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
+    <!-- DataTables -->
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+
     <!-- Include plotly.js -->
     <!-- For this to work we need include_plotlyjs=False in plot() -->
     <!-- https://www.codingwithricky.com/2019/08/28/easy-django-plotly/ -->
@@ -36,23 +54,31 @@
             <div class='sidenav' id='sidenav'>
 
                 <header id='sidenav_header'>
-                    FitPy
+                    {% if title %}
+                        FitPy - {{ title }}
+                    {% else %}
+                        FitPy
+                    {% endif %}
                 </header>
 
                 <!-- Sidenav items -->
                 <ul id='sidenav_items'>
 
                     <li>
-                        <a href="{% url 'fitpy-home' %}"><i class="fa fa-home"></i>Home</a>
+                        <a href="{% url 'fitpy-home' %}"><i class="fa fa-dumbbell"></i>Workouts</a>
                     </li>
 
                     <li>
-                        <a href="{% url 'fitpy-running' %}"><i class="fa fa-running"></i>Running</a>
+                        <a href="{% url 'fitpy-running' %}"><i class="fa fa-running"></i>Runs</a>
                     </li>
 
-                    <!-- <li>
-                        <a href='#'><i class="fa fa-chart-pie"></i>Statistics</a>
-                    </li> -->
+                    <li>
+                        <a href="#"><i class="fa fa-sign-in-alt"></i>Login</a>
+                    </li>
+
+                    <li>
+                        <a href="#"><i class="fa fa-user-plus"></i>Register</a>
+                    </li>
 
                 </ul>
                 <!-- sidenav_items -->
@@ -66,7 +92,7 @@
                 <!-- WORKOUTS TAB -->
 
                 <!-- stats -->
-                {% block stats %}{% endblock %}
+                {% block workout_stats %}{% endblock %}
 
                 <!-- Workout log -->
                 {% block workout_log %}{% endblock %}
@@ -75,6 +101,9 @@
                 {% block workout_plots %}{% endblock %}
 
                 <!-- RUNNING TAB -->
+
+                <!-- stats -->
+                {% block running_stats %}{% endblock %}
 
                 <!-- Running log -->
                 {% block run_log %}{% endblock %}
@@ -91,18 +120,9 @@
     </div>
     <!-- main_container -->
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <!-- Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <!-- DataTables -->
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
-
     <!-- workout_log DataTable -->
     <script type='text/javascript'>
-        $(document).ready(function(){
+        $(document).ready(function() {
             $('#workout_log').DataTable({
                 'pageLength' : 10,
                 'info' : false,
@@ -112,7 +132,12 @@
                 // Hide particular columns
                 'columnDefs' : [
                     {
-                        'targets' : [4],
+                        'targets' : 4,
+                        'visible' : false,
+                        'searchable' : true
+                    },
+                    {
+                        'targets' : 5,
                         'visible' : false,
                         'searchable' : true
                     }
@@ -125,7 +150,6 @@
                     } else if (data[4] == "back") {
                         $('td', row).css('background-color', 'rgba(29, 41, 81, 1)'); // space
                     } else if (data[4] == "legs") {
-                        // $('td', row).css('background-color', 'rgba(0, 49, 82, 1)'); // prussian
                         $('td', row).css('background-color', 'rgba(0, 142, 204, 1)'); // olympic
                     } else if (data[4] == "compound") {
                         // $('td', row).css('background-color', 'rgba(0, 0, 128, 1)'); // navy
@@ -134,8 +158,8 @@
                         $('td', row).css('background-color', 'rgba(16, 52, 166, 1)'); // egyptian
                     } else if (data[4] == "other") {
                         $('td', row).css('background-color', 'rgba(0, 128, 255, 1)'); // azure
-                    } else if (data[4] == "double_workout") {
-                        $('td', row).css('background-color', 'rgba(101, 147, 245, 1)'); // cornflower
+                    } else if (data[4] == "rest") {
+                        $('td', row).css('background-color', 'rgba(0, 49, 82, 1)'); // prussian
                     }
                 } // rowCallback
                 // 'initComplete': function(){

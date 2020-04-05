@@ -3,6 +3,7 @@
 :root {
     --sidenav_width: 250px;
     --sidenav_head_height: 100px;
+    --sidenav_header_size: 25px;
     --homepage_margin: 50px;
 }
 
@@ -27,7 +28,6 @@ body {
 #sidenav {
     left: 0px;
     width: var(--sidenav_width);
-    /* width: 100%; */
     height: 100%;
     background: #3E3E3E;
     position: fixed;
@@ -35,7 +35,7 @@ body {
 }
 
 #sidenav_header {
-    font-size: 30px;
+    font-size: var(--sidenav_header_size);
     font-weight: bold;
     color: #FFFFFF;
     /* text-align: center; */
@@ -46,7 +46,7 @@ body {
 }
 
 #sidenav ul a {
-    font-size: 20px;
+    font-size: calc(var(--sidenav_header_size) - 5px);
     height: 100%;
     width: 100%;
     line-height: var(--sidenav_head_height);
@@ -81,9 +81,9 @@ body {
     margin-top: 0px; /* or var(--sidenav_head_height) */
 }
 
-/* #################### STATS #################### */
+/* #################### WORKOUT STATS #################### */
 
-#stats {
+#workout_stats {
     height: auto;
     width: 100%;
     margin: 0px;
@@ -94,13 +94,13 @@ body {
     border-collapse: collapse;
 }
 
-#stats th {
+#workout_stats th {
     background-color: #000000;
     color: #FFFFFF;
     font-weight: bold;
 }
 
-#stats tr {
+#workout_stats tr {
     color: #FFFFFF;
     /* font-weight: bold; */
 }
@@ -128,6 +128,29 @@ body {
 }
 
 #workout_log tr {
+    color: #FFFFFF;
+}
+
+/* #################### RUNNING STATS #################### */
+
+#running_stats {
+    height: auto;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: #3E3E3E;
+    text-align: center;
+    vertical-align: middle;
+    border-collapse: collapse;
+}
+
+#running_stats th {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+#running_stats tr {
     color: #FFFFFF;
 }
 
