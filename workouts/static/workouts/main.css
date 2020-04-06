@@ -1,7 +1,7 @@
 /* Globally defined variables */
 
 :root {
-    --navbar_header_size: 25px;
+    --navbar_header_size: 20px;
     --navbar_height: 70px;
     --left_padding: 20px;
 }
@@ -19,7 +19,7 @@
 
 body {
     /* background-color: #F0F0F0; */
-    /* font-size: 1rem; */
+    font-size: 0.875rem;
 }
 
 /* #################### NAVBAR #################### */
@@ -188,4 +188,17 @@ body {
 
 #run_log tr {
     color: #000000;
+}
+
+/* #################### UESR PROFILE #################### */
+
+.account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+}
+
+.account-heading {
+    font-size: 2.5rem;
 }

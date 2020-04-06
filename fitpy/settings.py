@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'i+5pcklm(o^&2d+q_rh=+o!78_^32vmep18yto17@x=_77rxw3'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -129,3 +127,9 @@ LOGIN_REDIRECT_URL = 'workouts-home'
 # this will redirect him/her to the login page
 
 LOGIN_URL = 'login'
+
+# Define where Django should look for images (i.e. Profile images)
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # where Django stores uploaded files
+
+MEDIA_URL = '/media/' # public url of this (i.e. the above) directory
