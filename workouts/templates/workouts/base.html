@@ -81,7 +81,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{% url 'workouts-register' %}">
                                 <i class="fa fa-fw fa-user-plus"></i>Register
                             </a>
                         </li>
@@ -104,7 +104,18 @@
                     </h1>
 
                 </div>
-                <!-- d-flex -->
+
+                <!-- Flash messages for user registration -->
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class='alert alert-{{ message.tags }}'>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Content -->
 
                 {% block content %}{% endblock %}
 
