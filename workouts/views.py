@@ -45,7 +45,7 @@ def pace_avg(dur, dist):
 ####################################################################################################
 ####################################################################################################
 
-# Home page
+# WORKOUTS TAB
 
 # Create a function to handle the traffic from the home page of the app
 # Within the function, return what we want the user to see when they are sent to this route
@@ -365,7 +365,10 @@ def home(request):
         fig,
         output_type='div',
         show_link=False,
-        link_text=''
+        link_text='',
+        config=dict(
+            displayModeBar=False
+        )
     )
 
     ######################################################################
@@ -427,7 +430,10 @@ def home(request):
         pie_plots,
         output_type='div',
         show_link=False,
-        link_text=''
+        link_text='',
+        config=dict(
+            displayModeBar=False
+        )
     )
 
     ######################################################################
@@ -460,12 +466,11 @@ def home(request):
     ######################################################################
 
     context = {
-        # 'title' : 'Workout log',
+        'title' : 'Workout log',
         'stats' : stats,
-        'workouts' : data,
+        'objects' : Workout.objects.all(),
         'fig_div' : fig_div,
-        'pie_plots_div' : pie_plots_div,
-        'test' : Workout.objects.all()
+        'pie_plots_div' : pie_plots_div
     }
 
     return render(request, 'workouts/home.html', context)
@@ -473,9 +478,9 @@ def home(request):
 ####################################################################################################
 ####################################################################################################
 
-# Running page
+# RUNS TAB
 
-def running(request):
+def runs(request):
 
     ######################################################################
 
@@ -685,7 +690,10 @@ def running(request):
         run_plots,
         output_type='div',
         show_link=False,
-        link_text=''
+        link_text='',
+        config=dict(
+            displayModeBar=False
+        )
     )
 
     # Convert date column from datetime to string
@@ -703,13 +711,13 @@ def running(request):
     ######################################################################
 
     context = {
-        # 'title' : 'Running log',
+        'title' : 'Running log',
         'stats' : stats,
         'run_cols' : run_cols,
         'run' : run,
         'run_plots_div' : run_plots_div
     }
 
-    return render(request, 'workouts/running.html', context)
+    return render(request, 'workouts/runs.html', context)
 
 #####

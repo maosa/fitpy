@@ -1,12 +1,11 @@
 {% extends 'workouts/base.html' %}
 
-<!-- Running stats -->
+{% block content %}
 
-{% block running_stats %}
+    <!-- Run stats -->
 
-    <div class='w-100' id='stats_row'>
-
-        <table class='table' id='running_stats'>
+    <div class="table-responsive">
+        <table class="table" id='run_stats'>
 
             <thead>
                 <tr>
@@ -37,20 +36,15 @@
             </tbody>
 
         </table>
-
-        <br>
-
     </div>
+    <!-- table-responsive -->
 
-{% endblock running_stats %}
+    <br>
 
-<!-- Running log -->
+    <!-- Running log -->
 
-{% block run_log %}
-
-    <div class='w-100' id='run_log_row'>
-
-        <table class='table' id='run_log'>
+    <div class="table-responsive">
+        <table class="table" id='run_log'>
 
             <thead>
                 <tr>
@@ -75,21 +69,13 @@
             </tbody>
 
         </table>
-
     </div>
+    <!-- table-responsive -->
 
-{% endblock run_log %}
+    <!-- Graphs and plots -->
 
-<!-- Graphs and plots -->
+    {% autoescape off %}
+        {{ run_plots_div }}
+    {% endautoescape %}
 
-{% block run_plots %}
-
-    <div class='w-100' id='run_plots_row'>
-
-        {% autoescape off %}
-            {{ run_plots_div }}
-        {% endautoescape %}
-
-    </div>
-
-{% endblock run_plots %}
+{% endblock %}

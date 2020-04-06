@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from users import views as user_views
 
 # Tell Django which route gets mapped to which url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('workouts.urls')) # home page
+    # Link directly to the function that is going to render this from the users application
+    path('register/', user_views.register, name='register'),
+    path('', include('workouts.urls')) # workouts app home page
 ]

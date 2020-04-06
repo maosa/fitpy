@@ -1,84 +1,97 @@
 /* Globally defined variables */
 
 :root {
-    --sidenav_width: 250px;
-    --sidenav_head_height: 100px;
-    --sidenav_header_size: 25px;
-    --homepage_margin: 50px;
+    --navbar_header_size: 25px;
+    --navbar_height: 70px;
+    --left_padding: 20px;
 }
 
 * {
-    margin: 0px;
-    padding: 0px;
-    line-style: none;
-    text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
-    overflow-x: hidden;
+    /* margin: 0px; */
+    /* padding: 0px; */
+    /* line-style: none; */
+    /* text-decoration: none; */
+    /* overflow-x: hidden; */
 }
 
 /* We're working with the body tag, and so with the WHOLE page */
 
 body {
-    background-color: #F0F0F0;
-    /* background-color: #FFFFFF; */
+    /* background-color: #F0F0F0; */
+    /* font-size: 1rem; */
 }
 
-/* #################### SIDENAV #################### */
+/* #################### NAVBAR #################### */
 
-#sidenav {
-    left: 0px;
-    width: var(--sidenav_width);
-    height: 100%;
-    background: #3E3E3E;
-    position: fixed;
-    overflow: auto;
-}
+/* Navbar header */
 
-#sidenav_header {
-    font-size: var(--sidenav_header_size);
+.navbar-brand {
+    font-size: var(--navbar_header_size);
     font-weight: bold;
-    color: #FFFFFF;
-    /* text-align: center; */
-    line-height: var(--sidenav_head_height);
-    background: #000000;
-    padding-left: 20px;
-    user-select: none
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: var(--left_padding);
+    background-color: rgba(0, 0, 0, 0.25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
 }
 
-#sidenav ul a {
-    font-size: calc(var(--sidenav_header_size) - 5px);
-    height: 100%;
-    width: 100%;
-    line-height: var(--sidenav_head_height);
-    color: #FFFFFF;
-    padding-left: 20px;
-    text-decoration: none;
-    box-sizing: border-box;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid #000000;
-    display: block;
+/* #################### SIDEBAR #################### */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* place sidebar behind the navbar */
+    padding: var(--navbar_height) 0 0; /* navbar height */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
 }
 
-/* Add space between the icon and the text in the sidenav items */
-
-#sidenav ul a i {
-    margin-right: 10px
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - var(--navbar_height));
+    padding-top: 0.5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* scrollable contents if viewport is shorter than content */
 }
 
-/* Make sidenav items move/jump with mouse hovering */
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+    .sidebar-sticky {
+        position: -webkit-sticky;
+        position: sticky;
+    }
+}
 
-#sidenav ul li:hover a {
+/* Sidebar items */
+
+.sidebar .nav-link {
+    font-size: calc(var(--navbar_header_size) - 5px);
+    color: #333333;
+    padding-left: var(--left_padding);
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Add space between the icon and the text in the sidebar items */
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* Make sidebar items move/jump with mouse hovering */
+
+.sidebar ul li:hover a {
+    color: #007bff;
     padding-left: 35px
 }
 
 /* #################### MAIN PAGE #################### */
 
-#homepage {
-    height: 100%;
-    width: 100%;
-    margin-left: calc(var(--sidenav_width) + var(--homepage_margin)); /* same as sidenav width */
-    margin-right: var(--homepage_margin);
-    margin-top: 0px; /* or var(--sidenav_head_height) */
+[role="main"] {
+    padding-top: var(--navbar_height); /* space for fixed navbar */
 }
 
 /* #################### WORKOUT STATS #################### */
@@ -133,7 +146,7 @@ body {
 
 /* #################### RUNNING STATS #################### */
 
-#running_stats {
+#run_stats {
     height: auto;
     width: 100%;
     margin: 0px;
@@ -144,13 +157,13 @@ body {
     border-collapse: collapse;
 }
 
-#running_stats th {
+#run_stats th {
     background-color: #000000;
     color: #FFFFFF;
     font-weight: bold;
 }
 
-#running_stats tr {
+#run_stats tr {
     color: #FFFFFF;
 }
 
@@ -171,7 +184,6 @@ body {
     background-color: #000000;
     color: #FFFFFF;
     font-weight: bold;
-    /* text-transform: capitalize; */
 }
 
 #run_log tr {

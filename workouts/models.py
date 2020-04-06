@@ -13,7 +13,7 @@ class Workout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) # if a user is deleted, his/her posts are deleted too
 
     def __str__(self):
-        return('workout no: ' + str(self.no)) # def __str__(self) must return a string
+        return 'workout no: ' + str(self.no) # def __str__(self) must return a string
 
 # Create running class
 

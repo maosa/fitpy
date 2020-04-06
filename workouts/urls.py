@@ -5,8 +5,8 @@ from . import views
 # This returns the HttpResponse
 
 urlpatterns = [
-    path('', views.home, name='fitpy-home'),
-    path('running/', views.running, name='fitpy-running'),
+    path('', views.home, name='workouts-home'),
+    path('runs/', views.runs, name='workouts-runs'),
 ]
 
 #####

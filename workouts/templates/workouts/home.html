@@ -1,12 +1,11 @@
 {% extends 'workouts/base.html' %}
 
-<!-- Stats -->
+{% block content %}
 
-{% block workout_stats %}
+    <!-- Workout stats -->
 
-    <div class='w-100' id='stats_row'>
-
-        <table class='table' id='workout_stats'>
+    <div class="table-responsive">
+        <table class="table" id='workout_stats'>
 
             <thead>
                 <tr>
@@ -39,20 +38,15 @@
             </tbody>
 
         </table>
-
-        <br>
-
     </div>
+    <!-- table-responsive -->
 
-{% endblock workout_stats %}
+    <br>
 
-<!-- Workout log -->
+    <!-- Workout log -->
 
-{% block workout_log %}
-
-    <div class='w-100' id='workout_log_row'>
-
-        <table class='table' id='workout_log'>
+    <div class="table-responsive">
+        <table class="table" id='workout_log'>
 
             <thead>
                 <tr>
@@ -66,64 +60,30 @@
             </thead>
 
             <tbody>
-                {% for row in test %}
+                {% for obj in objects %}
                 <tr>
-                    <td>{{ row.no }}</td>
-                    <td>{{ row.date|date:"D, d-M-Y" }}</td>
-                    <td>{{ row.workout }}</td>
-                    <td>{{ row.duration }}</td>
-                    <td>{{ row.category }}</td>
-                    <td>{{ row.user }}</td>
+                    <td>{{ obj.no }}</td>
+                    <td>{{ obj.date|date:"D, d-M-Y" }}</td>
+                    <td>{{ obj.workout }}</td>
+                    <td>{{ obj.duration }}</td>
+                    <td>{{ obj.category }}</td>
+                    <td>{{ obj.user }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
 
-            <!-- <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Date</th>
-                    <th>Workout</th>
-                    <th>Duration (mins)</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for row in workouts %}
-                <tr>
-                    <td>{{ row.no }}</td>
-                    <td>{{ row.date }}</td>
-                    <td>{{ row.workout }}</td>
-                    <td>{{ row.duration }}</td>
-                    <td>{{ row.category }}</td>
-                    <td>{{ row.user }}</td>
-                </tr>
-                {% endfor %}
-            </tbody> -->
-
         </table>
-
     </div>
+    <!-- table-responsive -->
 
-{% endblock workout_log %}
+    <!-- Graphs and plots -->
 
-<!-- Graphs and plots -->
+    {% autoescape off %}
+        {{ fig_div }}
+    {% endautoescape %}
 
-{% block workout_plots %}
+    {% autoescape off %}
+        {{ pie_plots_div }}
+    {% endautoescape %}
 
-    <div class='w-100' id='wd_row'>
-
-        {% autoescape off %}
-            {{ fig_div }}
-        {% endautoescape %}
-
-    </div>
-
-    <div class='w-100' id='pie_charts_row'>
-
-        {% autoescape off %}
-            {{ pie_plots_div }}
-        {% endautoescape %}
-
-    </div>
-
-{% endblock workout_plots %}
+{% endblock %}
