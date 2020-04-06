@@ -1,6 +1,6 @@
 {% extends 'workouts/base.html' %}
 
-<!-- User registration form -->
+<!-- Login template -->
 
 {% block content %}
 
@@ -12,21 +12,21 @@
 
             <fieldset class='form-group'>
 
-                <legend class='border-bottom mb-4'>Sign up</legend>
+                <legend class='border-bottom mb-4'>Log in</legend>
 
                 {{ form.as_p }}
 
             </fieldset>
 
             <div class='form-group'>
-                <button class='btn btn-success' type='submit'>Sign up</button>
+                <button class='btn btn-success' type='submit'>Login</button>
             </div>
 
         </form>
 
         <div class='border-top pt-3'>
             <small class='text-muted'>
-                Already have an account? <a class='ml-2' href="{% url 'login' %}">Sign in</a>
+                Need an account? <a class='ml-2' href="{% url 'register' %}">Sign up</a>
             </small>
         </div>
 

@@ -120,3 +120,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# After a user logs in, direct him/her to the home page
+
+LOGIN_REDIRECT_URL = 'workouts-home'
+
+# If user tries to access the profile page while not logged in,
+# this will redirect him/her to the login page
+
+LOGIN_URL = 'login'

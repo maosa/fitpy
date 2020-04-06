@@ -44,11 +44,11 @@
 
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{% url 'workouts-home' %}">FitPy</a>
 
-        <ul class="navbar-nav px-3">
+        <!-- <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
                 <a class="nav-link" href="#">Sign out</a>
             </li>
-        </ul>
+        </ul> -->
 
     </nav>
 
@@ -68,23 +68,36 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item active">
                             <a class="nav-link" href="{% url 'workouts-runs' %}">
                                 <i class="fa fa-fw fa-running"></i>Runs
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fa fa-fw fa-sign-in-alt"></i>Login
-                            </a>
-                        </li>
+                        {% if user.is_authenticated %} <!-- if user is logged in -->
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{% url 'profile' %}">
+                                    <i class="fa fa-fw fa-user-circle"></i>Profile
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{% url 'logout' %}">
+                                    <i class="fa fa-fw fa-sign-out-alt"></i>Logout
+                                </a>
+                            </li>
+                        {% else %} <!-- if user is NOT logged in (i.e. is logged out) -->
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{% url 'login' %}">
+                                    <i class="fa fa-fw fa-sign-in-alt"></i>Login
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'workouts-register' %}">
-                                <i class="fa fa-fw fa-user-plus"></i>Register
-                            </a>
-                        </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{% url 'register' %}">
+                                    <i class="fa fa-fw fa-user-plus"></i>Register
+                                </a>
+                            </li>
+                        {% endif %}
 
                     </ul>
                 </div>
@@ -95,7 +108,8 @@
             <!-- MAIN PAGE -->
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+
+                <!-- <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 
                     <h1 class="h2">
                         {% if title %}
@@ -103,7 +117,7 @@
                         {% endif %}
                     </h1>
 
-                </div>
+                </div> -->
 
                 <!-- Flash messages for user registration -->
 
