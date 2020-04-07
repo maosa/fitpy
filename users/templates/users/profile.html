@@ -17,10 +17,35 @@
                 <p class="text-secondary">{{ user.email }}</p>
 
             </div>
+            <!-- media-body -->
 
         </div>
         <!-- media -->
 
+        <!-- Form for updating user profile elements -->
+        <!-- Add encoding (enctype) to properly pass image data for the profile picture -->
+
+        <form method='POST' enctype='multipart/form-data'>
+
+            {% csrf_token %}
+
+            <fieldset class='form-group'>
+
+                <legend class='border-bottom mb-4'>Profile info</legend>
+
+                {{ u_form.as_p }}
+
+                {{ p_form.as_p }}
+
+            </fieldset>
+
+            <div class='form-group'>
+                <button class='btn btn-success' type='submit'>Update</button>
+            </div>
+
+        </form>
+
     </div>
+    <!-- content-section -->
 
 {% endblock %}

@@ -44,11 +44,15 @@
 
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{% url 'workouts-home' %}">FitPy</a>
 
-        <!-- <ul class="navbar-nav px-3">
+        <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <a class="nav-link" href="#">Sign out</a>
+                <!-- <a class="nav-link" href="#">Sign out</a> -->
+                {% if user.is_authenticated %} <!-- if user is logged in -->
+                    <font color="#FFFFFF">{{ user.username }}</font>
+                    <img src="{{ user.profile.image.url }}" style="width:50px;height:50px;"></img>
+                {% endif %}
             </li>
-        </ul> -->
+        </ul>
 
     </nav>
 
