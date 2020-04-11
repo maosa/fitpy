@@ -1,25 +1,46 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User # import the User model
+from django.urls import reverse
 
 # Create workout class (or model)
 
 class Workout(models.Model):
-    no = models.IntegerField()
-    date = models.DateField(default=timezone.now)
-    workout = models.CharField(max_length=50)
-    duration = models.IntegerField()
-    category = models.CharField(max_length=50)
-    user = models.ForeignKey(User, on_delete=models.CASCADE) # if a user is deleted, his/her posts are deleted too
+    # no = models.IntegerField() # do not use the no field as Django uses its own ID (primary key)
+    date = models.DateField(blank=False, default=timezone.now)
+    workout = models.CharField(
+        blank=False,
+        max_length=50,
+        choices=[
+            ('Chest', 'Chest'),
+            ('Back', 'Back'),
+            ('Legs', 'Legs'),
+            ('Compound', 'Compound'),
+            ('Multisport', 'Multisport'),
+            ('Running', 'Running'),
+            ('Cycling', 'Cycling'),
+            ('Bouldering', 'Bouldering'),
+            ('Swimming', 'Swimming'),
+            ('Surfing', 'Surfing'),
+            ('Skiing', 'Skiing'),
+            ('Other', 'Other'),
+            ('Rest', 'Rest')
+        ] # choices
+    ) # CharField
+    duration = models.IntegerField(blank=False)
+    distance = models.FloatField(blank=True, default=0)
+    pace = models.FloatField(blank=True)
+    category = models.CharField(blank=True, max_length=50)
+    # If a user is deleted, his/her posts are deleted too
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return 'workout no: ' + str(self.no) # def __str__(self) must return a string
+        return 'workout ' + str(self.id) # def __str__(self) must return a string
 
-# Create running class
+    # Redirect the user to the detail view of the new workout after the post has been created
+    # Return the URL as a string and let the view handle the redirect for us
+    # Alternatively see ~ minute 30
+    # https://www.youtube.com/watch?v=-s7e_Fy6NRU&list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p&index=10
 
-# class Run(models.Model):
-#     no = models.FloatField()
-#     date = models.DateField(default=timezone.now)
-#     distance = models.FloatField()
-#     duration = models.IntegerField()
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    def get_absolute_url(self):
+        return reverse('workout-detail', kwargs={'pk' : self.pk})

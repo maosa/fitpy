@@ -54,6 +54,8 @@
                     <th>Date</th>
                     <th>Workout</th>
                     <th>Duration (mins)</th>
+                    <th>Distance (km)</th>
+                    <th>Pace (mins/km)</th>
                     <th>Category</th>
                     <th>User</th>
                 </tr>
@@ -62,10 +64,12 @@
             <tbody>
                 {% for obj in objects %}
                 <tr>
-                    <td>{{ obj.no }}</td>
+                    <td><a class="article-title" href="{% url 'workout-detail' obj.id %}">{{ obj.id }}</a></td>
                     <td>{{ obj.date|date:"D, d-M-Y" }}</td>
                     <td>{{ obj.workout }}</td>
                     <td>{{ obj.duration }}</td>
+                    <td>{{ obj.distance|floatformat:2 }}</td>
+                    <td>{{ obj.pace|floatformat:2 }}</td>
                     <td>{{ obj.category }}</td>
                     <td>{{ obj.user }}</td>
                 </tr>

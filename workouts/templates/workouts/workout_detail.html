@@ -1,0 +1,32 @@
+{% extends 'workouts/base.html' %}
+
+{% block content %}
+
+<article class="media content-section">
+
+    <img class="rounded-circle article-img" src="{{ object.user.profile.image.url }}">
+
+    <div class="media-body">
+
+        <div class="article-metadata">
+            <a class="mr-2" href="{% url 'profile' %}">{{ object.user }}</a>
+            <small class="text-muted">{{ object.date }}</small>
+        </div>
+
+        <h2 class="article-title">Workout {{ object.id }}</h2>
+
+        <p class="article-content">Type: {{ object.workout }}</p>
+
+        <p class="article-content">Duration: {{ object.duration }} minutes</p>
+
+        {% if object.distance and object.pace %}
+            <p class="article-content">Distance: {{ object.distance|floatformat:2 }} km</p>
+            <p class="article-content">Pace: {{ object.pace|floatformat:2 }} minutes/km</p>
+        {% endif %}
+
+        <p class="article-content">Category: {{ object.category }}</p>
+    </div>
+
+</article>
+
+{% endblock content %}

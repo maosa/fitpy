@@ -13,7 +13,9 @@ class Profile(models.Model):
 
     # Override the save method to scale down user profile pictures
 
-    def save(self):
+    def save(self, **kwargs):
+        # **kwargs is needed as after creating the Profile class, clearing the database and the migrations
+        # and re-setting them, creates an error (if **kwargs is not present here)
         super().save() # run the save method of the parent class
         # Resize the image using the Pillow library/package
         img = Image.open(self.image.path) # open the image of the current instance

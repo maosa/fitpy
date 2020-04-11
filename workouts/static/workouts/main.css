@@ -130,7 +130,7 @@ body {
     vertical-align: middle;
     /* background-color: #000000; */
     border-collapse: collapse;
-    display: none;
+    /* display: none; /* when using JS $('#workout_log').show(); */
 }
 
 #workout_log th {
@@ -141,7 +141,47 @@ body {
 }
 
 #workout_log tr {
-    color: #FFFFFF;
+    color: #000000;
+}
+
+/* Detailed view for individual workouts */
+
+.content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+
+.article-title {
+    color: #444444;
+}
+
+a.article-title:hover {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.article-content {
+    white-space: pre-line;
+}
+
+.article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+}
+
+.article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3
+}
+
+.article-metadata a:hover {
+    color: #333;
+    text-decoration: none;
 }
 
 /* #################### RUNNING STATS #################### */
