@@ -281,23 +281,23 @@ def runs(request):
         del pace_tmp, pace_m, pace_s
         return(mean_pace)
 
-    # Read data
+    # Get data
 
-    run = pd.read_csv('/Users/maosa/fitr/run.csv', sep=',')
+    data = pd.DataFrame(list(Workout.objects.all().values()))
 
-    data = pd.read_csv('data.csv', sep=',')
+    run = pd.DataFrame(list(Workout.objects.filter(workout='Running').values()))
 
     # Convert colnames to lowercase
 
-    run.columns = [c.lower() for c in run.columns]
-
     data.columns = [x.lower() for x in list(data.columns)]
+
+    run.columns = [x.lower() for x in list(run.columns)]
 
     # Convert date column to datetime
 
-    run['date'] = pd.to_datetime(run['date'], format='%Y-%m-%d')
-
     data['date'] = pd.to_datetime(data['date'], format='%Y-%m-%d')
+
+    run['date'] = pd.to_datetime(run['date'], format='%Y-%m-%d')
 
     # Calculate pace
 
@@ -523,75 +523,13 @@ def runs(request):
 
 def statistics(request):
 
-    # Define functions
+    # Get data
 
-    def pace(dur, dist):
-        pace_tmp = dur/dist
-        pace_m = pace_tmp.astype(int)
-        pace_s = [
-            round((int(str(x).split('.')[1])/(10**(len(str(x).split('.')[1])))) * 0.6, 2) for x in list(pace_tmp)
-        ]
-        pace = pace_m + pace_s
-        del pace_tmp, pace_m, pace_s
-        return(round(pace, 2))
-
-    # Read data
-
-    data = pd.read_csv('/Users/maosa/fitr/data.csv', sep=',', )
+    data = pd.DataFrame(list(Workout.objects.all().values()))
 
     # Make colnames lowercase
 
     data.columns = [x.lower() for x in list(data.columns)]
-
-    # Categorise workouts
-
-    category = []
-
-    for w in range(0, len(data)):
-
-        workout = data['workout'][w]
-
-        if workout == 'Chest':
-            category.append('chest')
-        elif workout == 'Back':
-            category.append('back')
-        elif workout in ['Legs', 'Legs and Core']:
-            category.append('legs')
-        elif workout in ['Compound', 'Multisport']:
-            category.append('compound')
-        elif workout in [
-            'Running', 'Cycling', 'Cardio', 'Basketball', 'Swimming', 'Surfing', 'Skiing'
-        ]:
-            category.append('cardio')
-        elif workout == 'Rest':
-            category.append('rest')
-        else:
-            category.append('other')
-
-    if len(category) == len(data):
-        data['category'] = category
-
-    # Add user
-
-    data['user'] = 'maosa'
-
-    # Handle running data
-
-    run = pd.read_csv('/Users/maosa/fitr/run.csv', sep=',', )
-
-    run.columns = [x.lower() for x in list(run.columns)]
-
-    run['pace'] = pace(run['duration'], run['distance'])
-
-    run.drop(labels=['no', 'duration'], axis=1, inplace=True)
-
-    # Compile the database
-
-    data = pd.merge(left=data, right=run, how='left', on='date')
-
-    data.fillna(value=0, inplace=True)
-
-    data = data[['no', 'date', 'workout', 'duration', 'distance', 'pace', 'category', 'user']]
 
     # Convert dates to datetime
 
@@ -622,10 +560,6 @@ def statistics(request):
     duration_diff[0] = 0
 
     data_filt['duration_diff'] = duration_diff
-
-    # Fix the first column
-
-    data_filt['no'] = range(1, len(data_filt) + 1)
 
     # Reset index
 
@@ -877,7 +811,7 @@ def statistics(request):
     # Data transformation for generating pie charts
 
     data_stats = data.drop(
-        labels=['no', 'year', 'month', 'week', 'day'], axis=1
+        labels=['year', 'month', 'week', 'day'], axis=1
     ).groupby(
         'category', as_index=False
     ).agg(

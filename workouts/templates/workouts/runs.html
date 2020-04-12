@@ -48,7 +48,7 @@
 
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th>#</th>
                     <th>Date</th>
                     <th>Distance (km)</th>
                     <th>Duration (mins)</th>
@@ -59,11 +59,11 @@
             <tbody>
                 {% for row in run %}
                 <tr>
-                    <td>{{ row.no }}</td>
+                    <td>{{ row.id }}</td>
                     <td>{{ row.date }}</td>
-                    <td>{{ row.distance }}</td>
+                    <td>{{ row.distance|floatformat:2 }}</td>
                     <td>{{ row.duration }}</td>
-                    <td>{{ row.pace }}</td>
+                    <td>{{ row.pace|floatformat:2 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

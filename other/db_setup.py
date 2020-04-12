@@ -20,6 +20,8 @@ python manage.py migrate
 
 python manage.py createsuperuser # remember to upload a profile picture
 
+python manage.py runserver
+
 python manage.py shell
 
 ################################################################################
@@ -55,7 +57,7 @@ def pace(dur, dist):
     pace_s = [round((int(str(x).split('.')[1])/(10**(len(str(x).split('.')[1])))) * 0.6, 2) for x in list(pace_tmp)]
     pace = pace_m + pace_s
     del pace_tmp, pace_m, pace_s
-    return(pace)
+    return(round(pace, 2))
 
 # Read data
 
@@ -145,6 +147,11 @@ for i in range(0, len(db)):
         workout.save()
     except:
         print('There was a problem with row', i)
+
+################################################################################
+################################################################################
+
+# OTHER
 
 ################################################################################
 ################################################################################
