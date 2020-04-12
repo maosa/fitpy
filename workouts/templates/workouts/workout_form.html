@@ -12,7 +12,7 @@
 
             <fieldset class='form-group'>
 
-                <legend class='border-bottom mb-4'>Add new workout</legend>
+                <legend class='border-bottom mb-4'>Workout</legend>
 
                 {{ form.as_p }}
 
@@ -20,6 +20,7 @@
 
             <div class='form-group'>
                 <button class='btn btn-success' type='submit'>Add</button>
+                <a class='btn btn-outline-secondary' href="{% url 'workout-detail' object.id %}">Cancel</a>
             </div>
 
         </form>

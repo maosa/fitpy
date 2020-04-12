@@ -44,15 +44,22 @@
 
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{% url 'workouts-home' %}">FitPy</a>
 
-        <ul class="navbar-nav px-3">
-            <li class="nav-item text-nowrap">
-                <!-- <a class="nav-link" href="#">Sign out</a> -->
-                {% if user.is_authenticated %} <!-- if user is logged in, display his/her profile picture -->
+        {% if user.is_authenticated %} <!-- if user is logged in -->
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item text-nowrap">
+                    <a class="btn btn-outline-info" id="new_workout" href="{% url 'workout-create' %}">New workout</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav px-3">
+                <li class="nav-item text-nowrap">
                     <font color="#FFFFFF">{{ user.username }}</font>
                     <img src="{{ user.profile.image.url }}" style="width:50px;height:50px;"></img>
-                {% endif %}
-            </li>
-        </ul>
+                </li>
+            </ul>
+
+        {% endif %}
 
     </nav>
 
@@ -66,43 +73,43 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
 
-                        <li class="nav-item active">
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'workouts-home' %}">
                                 <i class="fa fa-fw fa-dumbbell"></i>Workouts
                             </a>
                         </li>
 
-                        <li class="nav-item active">
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'workouts-statistics' %}">
                                 <i class="fa fa-fw fa-chart-pie"></i>Statistics
                             </a>
                         </li>
 
-                        <li class="nav-item active">
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'workouts-runs' %}">
                                 <i class="fa fa-fw fa-running"></i>Runs
                             </a>
                         </li>
 
                         {% if user.is_authenticated %} <!-- if user is logged in -->
-                            <li class="nav-item active">
+                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'profile' %}">
                                     <i class="fa fa-fw fa-user-circle"></i>Profile
                                 </a>
                             </li>
-                            <li class="nav-item active">
+                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'logout' %}">
                                     <i class="fa fa-fw fa-sign-out-alt"></i>Logout
                                 </a>
                             </li>
                         {% else %} <!-- if user is NOT logged in (i.e. is logged out) -->
-                            <li class="nav-item active">
+                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'login' %}">
                                     <i class="fa fa-fw fa-sign-in-alt"></i>Login
                                 </a>
                             </li>
 
-                            <li class="nav-item active">
+                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'register' %}">
                                     <i class="fa fa-fw fa-user-plus"></i>Register
                                 </a>

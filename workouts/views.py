@@ -1,9 +1,14 @@
 from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin # user must be logged in to add a new workout
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin, # user must be logged in to add a new workout
+    UserPassesTestMixin # only original workout users can update their logged workouts
+)
 from django.views.generic import (
     ListView,
     DetailView,
-    CreateView
+    CreateView,
+    UpdateView,
+    DeleteView
 ) # class-based views
 from .models import Workout
 
@@ -118,6 +123,116 @@ class WorkoutCreateView(LoginRequiredMixin, CreateView):
         # Validate the form
 
         return super().form_valid(form)
+
+####################################################################################################
+
+# Class for updating logged workouts (similar to WorkoutCreateView)
+
+class WorkoutUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+
+    model = Workout
+
+    # Provide the form fields
+
+    fields = [
+        'date',
+        'workout',
+        'duration',
+        'distance'
+    ]
+
+    # Override the default form_valid
+
+    def form_valid(self, form):
+
+        # Set the user to the currently logged in user
+
+        form.instance.user = self.request.user
+
+        # Automatically set the workout category
+
+        if form.cleaned_data.get('workout') == 'Chest':
+            form.instance.category = 'chest'
+        elif form.cleaned_data.get('workout') == 'Back':
+            form.instance.category = 'back'
+        elif form.cleaned_data.get('workout') in ['Legs', 'Legs and Core']:
+            form.instance.category = 'legs'
+        elif form.cleaned_data.get('workout') in ['Compound', 'Multisport']:
+            form.instance.category = 'compound'
+        elif form.cleaned_data.get('workout') in [
+            'Running', 'Cycling', 'Cardio', 'Basketball', 'Swimming', 'Surfing', 'Skiing'
+        ]:
+            form.instance.category = 'cardio'
+        elif form.cleaned_data.get('workout') == 'Rest':
+            form.instance.category = 'rest'
+        else:
+            form.instance.category = 'other'
+
+        # Calculate the running pace
+
+        def pace(dur, dist):
+            pace_tmp = dur/dist
+            pace_m = int(pace_tmp)
+            pace_s = round((int(str(pace_tmp).split('.')[1])/(10**(len(str(pace_tmp).split('.')[1])))) * 0.6, 2)
+            pace = pace_m + pace_s
+            del pace_tmp, pace_m, pace_s
+            return(round(pace, 2))
+
+        distance = form.cleaned_data.get('distance')
+
+        if form.cleaned_data.get('workout') == 'Running' and distance > 0:
+            form.instance.pace = pace(
+                dur=form.cleaned_data.get('duration'),
+                dist=form.cleaned_data.get('distance')
+            )
+        else:
+            form.instance.pace = 0
+
+        # Validate the form
+
+        return super().form_valid(form)
+
+    # Make sure that only original workout authors/users can update their logged workouts
+
+    def test_func(self):
+
+        # Get the workout we are currently trying to update
+
+        workout = self.get_object()
+
+        # Check that the current user is the author of the logged workout
+
+        if self.request.user == workout.user:
+            return True
+        else:
+            return False
+
+####################################################################################################
+
+# Delete logged workouts (similar to WorkoutDetailView)
+
+class WorkoutDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+
+    model = Workout
+
+    # Add a success URL to be redirected to after successfully deleting a workout
+
+    success_url = '/'
+
+    # Make sure that only original workout authors/users can delete their workouts
+
+    def test_func(self):
+
+        # Get the workout we are currently trying to update
+
+        workout = self.get_object()
+
+        # Check that the current user is the author of the logged workout
+
+        if self.request.user == workout.user:
+            return True
+        else:
+            return False
 
 ####################################################################################################
 ####################################################################################################

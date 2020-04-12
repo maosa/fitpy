@@ -1,0 +1,60 @@
+{% extends 'workouts/base.html' %}
+
+<!-- Delete workout form -->
+
+{% block content %}
+
+    <div class='content-section'>
+
+        <form method='POST'>
+
+            {% csrf_token %}
+
+            <fieldset class='form-group'>
+
+                <legend class='border-bottom mb-4'>Delete workout</legend>
+
+                <h2>Are you sure you want to delete the following workout?</h2>
+
+                <img class="rounded-circle article-img" src="{{ object.user.profile.image.url }}">
+
+                <div class="media-body">
+
+                    <div class="article-metadata">
+                        <a class="mr-2" href="{% url 'profile' %}">{{ object.user }}</a>
+                        <small class="text-muted">{{ object.date }}</small>
+                    </div>
+
+                    <h2 class="article-title">Workout {{ object.id }}</h2>
+
+                    <p class="article-content">Type: {{ object.workout }}</p>
+
+                    <p class="article-content">Duration: {{ object.duration }} minutes</p>
+
+                    {% if object.distance and object.pace %}
+                        <p class="article-content">Distance: {{ object.distance|floatformat:2 }} km</p>
+                        <p class="article-content">Pace: {{ object.pace|floatformat:2 }} minutes/km</p>
+                    {% endif %}
+
+                    <p class="article-content">Category: {{ object.category }}</p>
+                </div>
+                <!-- media-body -->
+
+            </fieldset>
+
+            <div class='form-group'>
+
+                <!-- Confirm button -->
+                <button class='btn btn-outline-danger' type='submit'>Confirm</button>
+
+                <!-- Cancel button that redirects to the detail view -->
+                <a class='btn btn-outline-secondary' href="{% url 'workout-detail' object.id %}">Cancel</a>
+
+            </div>
+            <!-- form-group -->
+
+        </form>
+
+    </div>
+
+{% endblock %}

@@ -11,6 +11,13 @@
         <div class="article-metadata">
             <a class="mr-2" href="{% url 'profile' %}">{{ object.user }}</a>
             <small class="text-muted">{{ object.date }}</small>
+            <!-- If surrently logged in user is the original workout author -->
+            {% if object.user == user %}
+                <div>
+                    <a class='btn btn-secondary btn-sm mt-1 mb-1' href="{% url 'workout-update' object.id %}">Update</a>
+                    <a class='btn btn-danger btn-sm mt-1 mb-1' href="{% url 'workout-delete' object.id %}">Delete</a>
+                </div>
+            {% endif %}
         </div>
 
         <h2 class="article-title">Workout {{ object.id }}</h2>
