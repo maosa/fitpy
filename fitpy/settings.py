@@ -133,3 +133,15 @@ LOGIN_URL = 'login'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # where Django stores uploaded files
 
 MEDIA_URL = '/media/' # public url of this (i.e. the above) directory
+
+# Setup email setting
+# https://support.google.com/accounts/answer/185833?hl=en
+# https://www.youtube.com/watch?v=-tyBEsHSv7w&list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p&index=12
+# https://www.youtube.com/watch?v=5iWhQWVXosU
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')

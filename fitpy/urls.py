@@ -30,6 +30,30 @@ urlpatterns = [
     # Create login and logout views (look in users/templates for these templates)
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
+    # Password reset route - this is a form
+    path(
+        'password-reset/',
+        auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'),
+        name='password_reset'
+    ),
+    # Route for successful password reset form submission
+    path(
+        'password-reset/done/',
+        auth_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html'),
+        name='password_reset_done'
+    ),
+    # Route for confirming password reset form submission (takes in 2 URL parameters)
+    path(
+        'password-reset-confirm/<uidb64>/<token>/',
+        auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'),
+        name='password_reset_confirm'
+    ),
+    # Route for successful password reset completion
+    path(
+        'password-reset-complete/',
+        auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
+        name='password_reset_complete'
+    ),
     path('', include('workouts.urls')) # workouts app main page
 ]
 
