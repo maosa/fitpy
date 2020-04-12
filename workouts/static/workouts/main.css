@@ -130,7 +130,6 @@ body {
     vertical-align: middle;
     /* background-color: #000000; */
     border-collapse: collapse;
-    /* display: none; /* when using JS $('#workout_log').show(); */
 }
 
 #workout_log th {
@@ -217,7 +216,7 @@ a.article-title:hover {
     text-align: center;
     vertical-align: middle;
     border-collapse: collapse;
-    display: none;
+    display: none; /* when using JS $('#workout_log').show(); */
 }
 
 #run_log th {

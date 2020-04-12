@@ -1,0 +1,56 @@
+{% extends 'workouts/base.html' %}
+
+{% block content %}
+
+    <!-- Workout stats -->
+
+    <div class="table-responsive">
+        <table class="table table-sm" id='workout_stats'>
+
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Days</th>
+                    <th>Workouts (count)</th>
+                    <th>Workouts (%)</th>
+                    <th>Rest (count)</th>
+                    <th>Rest (%)</th>
+                    <th>Cardio (count)</th>
+                    <th>Cardio (%)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in stats %}
+                <tr>
+                    <td>{{ row.from }}</td>
+                    <td>{{ row.to }}</td>
+                    <td>{{ row.days }}</td>
+                    <td>{{ row.workouts }}</td>
+                    <td>{{ row.workouts_prop }}</td>
+                    <td>{{ row.rest }}</td>
+                    <td>{{ row.rest_prop }}</td>
+                    <td>{{ row.cardio }}</td>
+                    <td>{{ row.cardio_prop }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+    <!-- table-responsive -->
+
+    <br>
+
+    <!-- Graphs and plots -->
+
+    {% autoescape off %}
+        {{ fig_div }}
+    {% endautoescape %}
+
+    {% autoescape off %}
+        {{ pie_plots_div }}
+    {% endautoescape %}
+
+{% endblock %}

@@ -73,14 +73,14 @@
                         </li>
 
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'workouts-runs' %}">
-                                <i class="fa fa-fw fa-running"></i>Runs
+                            <a class="nav-link" href="{% url 'workouts-statistics' %}">
+                                <i class="fa fa-fw fa-chart-pie"></i>Statistics
                             </a>
                         </li>
 
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">
-                                <i class="fa fa-fw fa-chart-pie"></i>Statistics
+                            <a class="nav-link" href="{% url 'workouts-runs' %}">
+                                <i class="fa fa-fw fa-running"></i>Runs
                             </a>
                         </li>
 
@@ -218,10 +218,10 @@
                 // Highlight rows based on workout category
                 'rowCallback' : function(row, data) {
                     // https://graf1x.com/shades-of-blue-color-palette/
-                    if (data[4] <= 5 || data[2] >= 8) {
-                        $('td', row).css('background-color', 'rgba(56, 20, 96, 0.5)');
-                    } else if (data[4] > 5 || data[2] < 8) {
-                        $('td', row).css('background-color', 'rgba(178, 31, 102, 0.5)');
+                    if (data[2] >= 8 || data[4] <= 5) { // Good runs
+                        $('td', row).css('background-color', 'rgba(115, 194, 251, 0.5)'); // Maya
+                    } else if (data[2] < 8 || data[4] > 5) {
+                        $('td', row).css('background-color', 'rgba(70, 130, 180, 0.5)'); // Steel
                     }
                 } // rowCallback
             }); // run_log DataTable

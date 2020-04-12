@@ -27,25 +27,10 @@ from plotly.subplots import make_subplots
 ####################################################################################################
 ####################################################################################################
 
-# Define functions
-
-def pace_avg(dur, dist):
-    pace_tmp = dur/dist
-    pace_m = pace_tmp.astype(int)
-    pace_s = [(int(str(x).split('.')[1])/(10**(len(str(x).split('.')[1])))) for x in list(pace_tmp)]
-    pace = (pace_m + pace_s).mean()
-    pace_m = int(pace)
-    pace_s = round((int(str(pace).split('.')[1])/(10**(len(str(pace).split('.')[1]))) * 0.6), 2)
-    mean_pace = pace_m + pace_s
-    del pace_tmp, pace_m, pace_s
-    return(mean_pace)
-
-####################################################################################################
-####################################################################################################
-
 # WORKOUTS TAB
 
-####################################################################################################
+# Create a function to handle the traffic from the home page of the app
+# Within the function, return what we want the user to see when they are sent to this route
 
 class WorkoutListView(ListView):
     # What model to query in order to create the list
@@ -118,7 +103,7 @@ class WorkoutCreateView(LoginRequiredMixin, CreateView):
             pace_s = round((int(str(pace_tmp).split('.')[1])/(10**(len(str(pace_tmp).split('.')[1])))) * 0.6, 2)
             pace = pace_m + pace_s
             del pace_tmp, pace_m, pace_s
-            return(pace)
+            return(round(pace, 2))
 
         distance = form.cleaned_data.get('distance')
 
@@ -137,442 +122,32 @@ class WorkoutCreateView(LoginRequiredMixin, CreateView):
 ####################################################################################################
 ####################################################################################################
 
-# Create a function to handle the traffic from the home page of the app
-# Within the function, return what we want the user to see when they are sent to this route
-
-def home(request):
-
-    ######################################################################
-
-    # # Read data
-    #
-    # data = pd.read_csv('/Users/maosa/fitr/data.csv', sep=',', )
-    #
-    # # Make colnames lowercase
-    #
-    # data.columns = [x.lower() for x in list(data.columns)]
-    #
-    # # Convert dates to datetime
-    #
-    # data['date'] = pd.to_datetime(data['date'], format='%Y-%m-%d')
-    #
-    # # Categorise workouts
-    #
-    # category = []
-    #
-    # for w in range(len(data['workout'])):
-    #
-    #     workout = data['workout'][w]
-    #
-    #     if workout == 'Chest':
-    #         category.append('chest')
-    #     elif workout == 'Back':
-    #         category.append('back')
-    #     elif workout in ['Legs', 'Legs and Core']:
-    #         category.append('legs')
-    #     elif workout in ['Compound', 'Multisport']:
-    #         category.append('compound')
-    #     elif workout in ['Running', 'Cycling', 'Cardio', 'Basketball', 'Surfing']:
-    #         category.append('cardio')
-    #     elif workout == 'Rest':
-    #         category.append('rest')
-    #     else:
-    #         category.append('other')
-    #
-    # if len(category) == len(data):
-    #     data['category'] = category
-    #
-    # # Add user
-    #
-    # data['user'] = 'maosa'
-    #
-    # # Generate year, month, week, day columns
-    #
-    # data['year'] = data['date'].dt.year
-    #
-    # data['month'] = data['date'].dt.month
-    #
-    # data['week'] = data['date'].dt.week
-    #
-    # data['day'] = data['date'].dt.day
-    #
-    # # Remove rest days
-    #
-    # data_filt = data.copy() # copy the original data frame to a new one for filtering
-    #
-    # mask = ((data['workout'] != 'Rest') & (data['category'] != 'rest')) & (data['duration'] != 0)
-    #
-    # data_filt = data_filt[mask]
-    #
-    # # Calculate percentage change between workout durations
-    #
-    # duration_diff = list(round(data_filt['duration'].pct_change() * 100, 2))
-    #
-    # duration_diff[0] = 0
-    #
-    # data_filt['duration_diff'] = duration_diff
-    #
-    # # Fix the first column
-    #
-    # data_filt['no'] = range(1, len(data_filt) + 1)
-    #
-    # # Reset index
-    #
-    # data_filt.reset_index(drop=True, inplace=True)
-    #
-    # # Calculate day difference between workouts
-    #
-    # daydelta = [
-    #     int((data_filt['date'][i + 1] - data_filt['date'][i])/np.timedelta64(1, 'D')) for i in range(len(data_filt) - 1)
-    # ]
-    #
-    # daydelta.insert(0, 0) # or use float('NaN')
-    #
-    # data_filt['daydelta'] = daydelta
-    #
-    # ######################################################################
-    #
-    # # Stats
-    #
-    # if ((datetime.date(data['date'].iloc[-1]) - datetime.date(data['date'].iloc[0])).days + 1 == len(data)):
-    #     days = len(data)
-    # else:
-    #     days = 'ERROR'
-    #
-    # workouts = len(data[
-    #     ((data['workout'] != 'Rest') & (data['category'] != 'rest')) & (data['duration'] != 0)
-    # ])
-    #
-    # workouts_prop = round((workouts/days)*100, 2)
-    #
-    # rest = len(data[
-    #     ((data['workout'] == 'Rest') & (data['category'] == 'rest')) & (data['duration'] == 0)
-    # ])
-    #
-    # rest_prop = round((rest/days)*100, 2)
-    #
-    # runs = len(data[data['workout'] == 'Running'])
-    #
-    # runs_prop = round((runs/days)*100, 2)
-    #
-    # stats = [{
-    #     'from' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[0],
-    #     'to' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[-1],
-    #     'days' : days,
-    #     'workouts' : workouts,
-    #     'workouts_prop' : workouts_prop,
-    #     'rest' : rest,
-    #     'rest_prop' : rest_prop,
-    #     'runs' : runs,
-    #     'runs_prop' : runs_prop
-    # }]
-    #
-    # ######################################################################
-    #
-    # # Generate plots and graphs
-    #
-    # # Calculate required variables
-    #
-    # first_date = data_filt['date'].iloc[0]
-    # last_date = data_filt['date'].iloc[-1]
-    # mean_duration = data_filt['duration'].mean()
-    #
-    # fig = make_subplots(
-    #     rows=4,
-    #     cols=3,
-    #     specs=[
-    #         [{'colspan' : 3}, None, None],
-    #         [{'colspan' : 3}, None, None],
-    #         [{'colspan' : 3}, None, None],
-    #         [{}, {}, {}]
-    #     ],
-    #     subplot_titles=('Duration per workout',
-    #                     'Day difference between workouts',
-    #                     'Duration change between workouts',
-    #                     'Average workout time per week',
-    #                     'Average workout time per month',
-    #                     'Average workout time per year'),
-    #     vertical_spacing=0.1
-    # )
-    #
-    # # Plot 1
-    #
-    # fig.add_trace(
-    #     go.Scatter(
-    #         x=data_filt['date'],
-    #         y=data_filt['duration'],
-    #         mode='lines',
-    #         name='',
-    #         line=dict(width=1),
-    #         showlegend=False
-    #     ),
-    #     row=1,
-    #     col=1
-    # )
-    #
-    # # Horizontal line at average
-    #
-    # fig.add_shape(
-    #     type='line',
-    #     x0=first_date,
-    #     y0=mean_duration,
-    #     x1=last_date,
-    #     y1=mean_duration,
-    #     line=dict(
-    #         color='#000000',
-    #         width=1,
-    #         dash='dash',
-    #     ),
-    #     row=1,
-    #     col=1
-    # )
-    #
-    # # Add text on the horizontal line
-    #
-    # fig.add_trace(
-    #     go.Scatter(
-    #         x=[last_date - pd.DateOffset(60)],
-    #         y=[mean_duration + 5],
-    #         text=[round(mean_duration, 2)],
-    #         textposition='top left',
-    #         mode="text",
-    #         showlegend=False,
-    #         hoverinfo='none'
-    #     ),
-    #     row=1,
-    #     col=1
-    # )
-    #
-    # # Plot 2
-    #
-    # fig.add_trace(
-    #     go.Scatter(
-    #         x=data_filt['date'],
-    #         y=data_filt['daydelta'],
-    #         mode='lines',
-    #         name='',
-    #         line=dict(width=1),
-    #         showlegend=False
-    #     ),
-    #     row=2,
-    #     col=1
-    # )
-    #
-    # # Plot 3
-    #
-    # fig.add_trace(
-    #     go.Scatter(
-    #         x=data_filt['date'],
-    #         y=data_filt['duration_diff'],
-    #         mode='lines',
-    #         name='',
-    #         line=dict(width=1),
-    #         showlegend=False
-    #     ),
-    #     row=3,
-    #     col=1
-    # )
-    #
-    # # Plot 4
-    #
-    # fig.add_trace(
-    #     go.Scatter(
-    #         x=data.groupby(['year', 'week'], as_index=False).mean().index + 1,
-    #         y=round(data.groupby(['year', 'week'], as_index=False).mean()['duration'], 2),
-    #         mode='lines',
-    #         name='',
-    #         line=dict(width=1),
-    #         showlegend=False
-    #     ),
-    #     row=4,
-    #     col=1
-    # )
-    #
-    # # Plot 5
-    #
-    # fig.add_trace(
-    #     go.Scatter(
-    #         x=data.groupby(['year', 'month'], as_index=False).mean().index + 1,
-    #         y=round(data.groupby(['year', 'month'], as_index=False).mean()['duration'], 2),
-    #         mode='lines',
-    #         name='',
-    #         line=dict(width=1),
-    #         showlegend=False
-    #     ),
-    #     row=4,
-    #     col=2
-    # )
-    #
-    # # Plot 6
-    #
-    # fig.add_trace(
-    #     go.Scatter(
-    #         x=data.groupby('year', as_index=False).mean()['year'],
-    #         y=round(data.groupby('year', as_index=False).mean()['duration'], 2),
-    #         mode='lines',
-    #         name='',
-    #         line=dict(#color='firebrick',
-    #             width=1),
-    #         showlegend=False
-    #     ),
-    #     row=4,
-    #     col=3
-    # )
-    #
-    # # Update xaxis properties
-    #
-    # fig.update_xaxes(title_text='Date', row=3, col=1)
-    #
-    # fig.update_xaxes(title_text='Week', row=4, col=1)
-    #
-    # fig.update_xaxes(title_text='Month', row=4, col=2)
-    #
-    # fig.update_xaxes(title_text='Year', row=4, col=3)
-    #
-    # # Update yaxis properties
-    #
-    # fig.update_yaxes(title_text='Duration (mins)', row=1, col=1)
-    #
-    # fig.update_yaxes(title_text='Daydelta (days)', row=2, col=1)
-    #
-    # fig.update_yaxes(title_text='Duration change (%)', row=3, col=1)
-    #
-    # fig.update_yaxes(title_text='Duration (mins)', row=4, col=1)
-    #
-    # # Update layout
-    #
-    # fig.update_layout(
-    #     height=1200,
-    #     # margin=dict(l=10, r=10, t=10, b=10, pad=4),
-    #     font=dict(
-    #         family='Helvetica, monospace',
-    #         size=16,
-    #         color="#000000"
-    #     )
-    # )
-    #
-    # fig_div = plot(
-    #     fig,
-    #     output_type='div',
-    #     show_link=False,
-    #     link_text='',
-    #     config=dict(
-    #         displayModeBar=False
-    #     )
-    # )
-    #
-    # ######################################################################
-    #
-    # # Data transformation for generating pie charts
-    #
-    # data_stats = data.drop(
-    #     labels=['no', 'year', 'month', 'week', 'day'], axis=1
-    # ).groupby(
-    #     'category', as_index=False
-    # ).agg(
-    #     ['sum', 'mean', 'count']
-    # )['duration'].transpose()
-    #
-    # data_stats.columns = [c.replace('_', ' ').capitalize() for c in data_stats.columns]
-    #
-    # ######################################################################
-    #
-    # # Pie charts
-    #
-    # pie_plots = make_subplots(
-    #     rows=1,
-    #     cols=2,
-    #     specs=[[{'type' : 'domain'}, {'type' : 'domain'}]]
-    # )
-    #
-    # pie_plots.add_trace(
-    #     go.Pie(
-    #         labels=data_stats.columns,
-    #         values=data_stats.loc['count', :],
-    #         name='Count',
-    #         title='Number of workouts per type'
-    #     ),
-    #     row=1,
-    #     col=1
-    # )
-    #
-    # pie_plots.add_trace(
-    #     go.Pie(
-    #         labels=data_stats.drop(labels='Rest', axis=1).columns,
-    #         values=data_stats.drop(labels='Rest', axis=1).loc['sum', :],
-    #         name='Duration',
-    #         title='Duration per workout type (mins)'
-    #     ),
-    #     row=1,
-    #     col=2
-    # )
-    #
-    # pie_plots.update_layout(
-    #     autosize=True,
-    #     font=dict(
-    #         family='Helvetica, monospace',
-    #         size=16,
-    #         color="#000000"
-    #     )
-    # )
-    #
-    # pie_plots_div = plot(
-    #     pie_plots,
-    #     output_type='div',
-    #     show_link=False,
-    #     link_text='',
-    #     config=dict(
-    #         displayModeBar=False
-    #     )
-    # )
-    #
-    # ######################################################################
-    #
-    # # Convert the data frame to a list of dictionaries where
-    # # each dictionary in the list is a data frame row
-    # # Note: This is used if one wants to loop over the data frame's rows
-    # # Run this just before the context dictionary is defined!
-    #
-    # # Modify date column
-    #
-    # data['date'] = data['date'].dt.strftime('%a, %d-%b-%Y')
-    #
-    # # Remove unnecessary columns
-    #
-    # data.drop(labels=['year', 'month', 'week', 'day'], axis=1, inplace=True)
-    #
-    # # data_filt.drop(labels=['daydelta', 'duration_diff', 'year', 'month', 'week', 'day'], axis=1, inplace=True)
-    #
-    # # Convert data frame to dictionary
-    #
-    # data = data.to_dict(orient='records')
-    #
-    # # data_filt = data_filt.to_dict(orient='records')
-    #
-    # # Convert data frame to list of lists
-    #
-    # # data_filt = data_filt.values.tolist()
-
-    ######################################################################
-
-    context = {
-        'title' : 'Workout log',
-        # 'stats' : stats,
-        'objects' : Workout.objects.all()
-        # 'fig_div' : fig_div,
-        # 'pie_plots_div' : pie_plots_div
-    }
-
-    return render(request, 'workouts/home.html', context)
-
-####################################################################################################
-####################################################################################################
-
 # RUNS TAB
 
 def runs(request):
 
-    ######################################################################
+    # Define functions
+
+    def pace(dur, dist):
+        pace_tmp = dur/dist
+        pace_m = pace_tmp.astype(int)
+        pace_s = [
+            round((int(str(x).split('.')[1])/(10**(len(str(x).split('.')[1])))) * 0.6, 2) for x in list(pace_tmp)
+        ]
+        pace = pace_m + pace_s
+        del pace_tmp, pace_m, pace_s
+        return(round(pace, 2))
+
+    def pace_avg(dur, dist):
+        pace_tmp = dur/dist
+        pace_m = pace_tmp.astype(int)
+        pace_s = [(int(str(x).split('.')[1])/(10**(len(str(x).split('.')[1])))) for x in list(pace_tmp)]
+        pace = (pace_m + pace_s).mean()
+        pace_m = int(pace)
+        pace_s = round((int(str(pace).split('.')[1])/(10**(len(str(pace).split('.')[1]))) * 0.6), 2)
+        mean_pace = pace_m + pace_s
+        del pace_tmp, pace_m, pace_s
+        return(mean_pace)
 
     # Read data
 
@@ -591,6 +166,10 @@ def runs(request):
     run['date'] = pd.to_datetime(run['date'], format='%Y-%m-%d')
 
     data['date'] = pd.to_datetime(data['date'], format='%Y-%m-%d')
+
+    # Calculate pace
+
+    run['pace'] = pace(run['duration'], run['distance'])
 
     ######################################################################
 
@@ -790,10 +369,6 @@ def runs(request):
 
     run['date'] = run['date'].dt.strftime('%a, %d-%b-%Y')
 
-    # Get colnames
-
-    run_cols = run.columns
-
     # Convert data frame to dictionary
 
     run = run.to_dict(orient='records')
@@ -803,11 +378,459 @@ def runs(request):
     context = {
         'title' : 'Running log',
         'stats' : stats,
-        'run_cols' : run_cols,
         'run' : run,
         'run_plots_div' : run_plots_div
     }
 
     return render(request, 'workouts/runs.html', context)
 
-#####
+####################################################################################################
+####################################################################################################
+
+# STATISTICS TAB
+
+def statistics(request):
+
+    # Define functions
+
+    def pace(dur, dist):
+        pace_tmp = dur/dist
+        pace_m = pace_tmp.astype(int)
+        pace_s = [
+            round((int(str(x).split('.')[1])/(10**(len(str(x).split('.')[1])))) * 0.6, 2) for x in list(pace_tmp)
+        ]
+        pace = pace_m + pace_s
+        del pace_tmp, pace_m, pace_s
+        return(round(pace, 2))
+
+    # Read data
+
+    data = pd.read_csv('/Users/maosa/fitr/data.csv', sep=',', )
+
+    # Make colnames lowercase
+
+    data.columns = [x.lower() for x in list(data.columns)]
+
+    # Categorise workouts
+
+    category = []
+
+    for w in range(0, len(data)):
+
+        workout = data['workout'][w]
+
+        if workout == 'Chest':
+            category.append('chest')
+        elif workout == 'Back':
+            category.append('back')
+        elif workout in ['Legs', 'Legs and Core']:
+            category.append('legs')
+        elif workout in ['Compound', 'Multisport']:
+            category.append('compound')
+        elif workout in [
+            'Running', 'Cycling', 'Cardio', 'Basketball', 'Swimming', 'Surfing', 'Skiing'
+        ]:
+            category.append('cardio')
+        elif workout == 'Rest':
+            category.append('rest')
+        else:
+            category.append('other')
+
+    if len(category) == len(data):
+        data['category'] = category
+
+    # Add user
+
+    data['user'] = 'maosa'
+
+    # Handle running data
+
+    run = pd.read_csv('/Users/maosa/fitr/run.csv', sep=',', )
+
+    run.columns = [x.lower() for x in list(run.columns)]
+
+    run['pace'] = pace(run['duration'], run['distance'])
+
+    run.drop(labels=['no', 'duration'], axis=1, inplace=True)
+
+    # Compile the database
+
+    data = pd.merge(left=data, right=run, how='left', on='date')
+
+    data.fillna(value=0, inplace=True)
+
+    data = data[['no', 'date', 'workout', 'duration', 'distance', 'pace', 'category', 'user']]
+
+    # Convert dates to datetime
+
+    data['date'] = pd.to_datetime(data['date'], format='%Y-%m-%d')
+
+    # Generate year, month, week, day columns
+
+    data['year'] = data['date'].dt.year
+
+    data['month'] = data['date'].dt.month
+
+    data['week'] = data['date'].dt.week
+
+    data['day'] = data['date'].dt.day
+
+    # Remove rest days
+
+    data_filt = data.copy() # copy the original data frame to a new one for filtering
+
+    mask = ((data['workout'] != 'Rest') & (data['category'] != 'rest')) & (data['duration'] != 0)
+
+    data_filt = data_filt[mask]
+
+    # Calculate percentage change between workout durations
+
+    duration_diff = list(round(data_filt['duration'].pct_change() * 100, 2))
+
+    duration_diff[0] = 0
+
+    data_filt['duration_diff'] = duration_diff
+
+    # Fix the first column
+
+    data_filt['no'] = range(1, len(data_filt) + 1)
+
+    # Reset index
+
+    data_filt.reset_index(drop=True, inplace=True)
+
+    # Calculate day difference between workouts
+
+    daydelta = [
+        int((data_filt['date'][i + 1] - data_filt['date'][i])/np.timedelta64(1, 'D')) for i in range(len(data_filt) - 1)
+    ]
+
+    daydelta.insert(0, 0) # or use float('NaN')
+
+    data_filt['daydelta'] = daydelta
+
+    ######################################################################
+
+    # Stats
+
+    if ((datetime.date(data['date'].iloc[-1]) - datetime.date(data['date'].iloc[0])).days + 1 == len(data)):
+        days = len(data)
+    else:
+        days = 'ERROR'
+
+    workouts = len(data[
+        ((data['workout'] != 'Rest') & (data['category'] != 'rest')) & (data['duration'] != 0)
+    ])
+
+    workouts_prop = round((workouts/days)*100, 2)
+
+    rest = len(data[
+        ((data['workout'] == 'Rest') & (data['category'] == 'rest')) & (data['duration'] == 0)
+    ])
+
+    rest_prop = round((rest/days)*100, 2)
+
+    cardio = len(data[data['category'] == 'cardio'])
+
+    cardio_prop = round((cardio/days)*100, 2)
+
+    stats = [{
+        'from' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[0],
+        'to' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[-1],
+        'days' : days,
+        'workouts' : workouts,
+        'workouts_prop' : workouts_prop,
+        'rest' : rest,
+        'rest_prop' : rest_prop,
+        'cardio' : cardio,
+        'cardio_prop' : cardio_prop
+    }]
+
+    ######################################################################
+
+    # Generate plots and graphs
+
+    # Calculate required variables
+
+    first_date = data_filt['date'].iloc[0]
+    last_date = data_filt['date'].iloc[-1]
+    mean_duration = data_filt['duration'].mean()
+
+    fig = make_subplots(
+        rows=4,
+        cols=3,
+        specs=[
+            [{'colspan' : 3}, None, None],
+            [{'colspan' : 3}, None, None],
+            [{'colspan' : 3}, None, None],
+            [{}, {}, {}]
+        ],
+        subplot_titles=('Duration per workout',
+                        'Day difference between workouts',
+                        'Duration change between workouts',
+                        'Average workout time per week',
+                        'Average workout time per month',
+                        'Average workout time per year'),
+        vertical_spacing=0.1
+    )
+
+    # Plot 1
+
+    fig.add_trace(
+        go.Scatter(
+            x=data_filt['date'],
+            y=data_filt['duration'],
+            mode='lines',
+            name='',
+            line=dict(width=1),
+            showlegend=False
+        ),
+        row=1,
+        col=1
+    )
+
+    # Horizontal line at average
+
+    fig.add_shape(
+        type='line',
+        x0=first_date,
+        y0=mean_duration,
+        x1=last_date,
+        y1=mean_duration,
+        line=dict(
+            color='#000000',
+            width=1,
+            dash='dash',
+        ),
+        row=1,
+        col=1
+    )
+
+    # Add text on the horizontal line
+
+    fig.add_trace(
+        go.Scatter(
+            x=[last_date - pd.DateOffset(60)],
+            y=[mean_duration + 5],
+            text=[round(mean_duration, 2)],
+            textposition='top left',
+            mode="text",
+            showlegend=False,
+            hoverinfo='none'
+        ),
+        row=1,
+        col=1
+    )
+
+    # Plot 2
+
+    fig.add_trace(
+        go.Scatter(
+            x=data_filt['date'],
+            y=data_filt['daydelta'],
+            mode='lines',
+            name='',
+            line=dict(width=1),
+            showlegend=False
+        ),
+        row=2,
+        col=1
+    )
+
+    # Plot 3
+
+    fig.add_trace(
+        go.Scatter(
+            x=data_filt['date'],
+            y=data_filt['duration_diff'],
+            mode='lines',
+            name='',
+            line=dict(width=1),
+            showlegend=False
+        ),
+        row=3,
+        col=1
+    )
+
+    # Plot 4
+
+    fig.add_trace(
+        go.Scatter(
+            x=data.groupby(['year', 'week'], as_index=False).mean().index + 1,
+            y=round(data.groupby(['year', 'week'], as_index=False).mean()['duration'], 2),
+            mode='lines',
+            name='',
+            line=dict(width=1),
+            showlegend=False
+        ),
+        row=4,
+        col=1
+    )
+
+    # Plot 5
+
+    fig.add_trace(
+        go.Scatter(
+            x=data.groupby(['year', 'month'], as_index=False).mean().index + 1,
+            y=round(data.groupby(['year', 'month'], as_index=False).mean()['duration'], 2),
+            mode='lines',
+            name='',
+            line=dict(width=1),
+            showlegend=False
+        ),
+        row=4,
+        col=2
+    )
+
+    # Plot 6
+
+    fig.add_trace(
+        go.Scatter(
+            x=data.groupby('year', as_index=False).mean()['year'],
+            y=round(data.groupby('year', as_index=False).mean()['duration'], 2),
+            mode='lines',
+            name='',
+            line=dict(#color='firebrick',
+                width=1),
+            showlegend=False
+        ),
+        row=4,
+        col=3
+    )
+
+    # Update xaxis properties
+
+    fig.update_xaxes(title_text='Date', row=3, col=1)
+
+    fig.update_xaxes(title_text='Week', row=4, col=1)
+
+    fig.update_xaxes(title_text='Month', row=4, col=2)
+
+    fig.update_xaxes(title_text='Year', row=4, col=3)
+
+    # Update yaxis properties
+
+    fig.update_yaxes(title_text='Duration (mins)', row=1, col=1)
+
+    fig.update_yaxes(title_text='Daydelta (days)', row=2, col=1)
+
+    fig.update_yaxes(title_text='Duration change (%)', row=3, col=1)
+
+    fig.update_yaxes(title_text='Duration (mins)', row=4, col=1)
+
+    # Update layout
+
+    fig.update_layout(
+        height=1200,
+        # margin=dict(l=10, r=10, t=10, b=10, pad=4),
+        font=dict(
+            family='Helvetica, monospace',
+            size=16,
+            color="#000000"
+        )
+    )
+
+    fig_div = plot(
+        fig,
+        output_type='div',
+        show_link=False,
+        link_text='',
+        config=dict(
+            displayModeBar=False
+        )
+    )
+
+    ######################################################################
+
+    # Data transformation for generating pie charts
+
+    data_stats = data.drop(
+        labels=['no', 'year', 'month', 'week', 'day'], axis=1
+    ).groupby(
+        'category', as_index=False
+    ).agg(
+        ['sum', 'mean', 'count']
+    )['duration'].transpose()
+
+    data_stats.columns = [c.replace('_', ' ').capitalize() for c in data_stats.columns]
+
+    ######################################################################
+
+    # Pie charts
+
+    pie_plots = make_subplots(
+        rows=1,
+        cols=2,
+        specs=[[{'type' : 'domain'}, {'type' : 'domain'}]]
+    )
+
+    pie_plots.add_trace(
+        go.Pie(
+            labels=data_stats.columns,
+            values=data_stats.loc['count', :],
+            name='Count',
+            title='Number of workouts per type'
+        ),
+        row=1,
+        col=1
+    )
+
+    pie_plots.add_trace(
+        go.Pie(
+            labels=data_stats.drop(labels='Rest', axis=1).columns,
+            values=data_stats.drop(labels='Rest', axis=1).loc['sum', :],
+            name='Duration',
+            title='Duration per workout type (mins)'
+        ),
+        row=1,
+        col=2
+    )
+
+    pie_plots.update_layout(
+        autosize=True,
+        font=dict(
+            family='Helvetica, monospace',
+            size=16,
+            color="#000000"
+        )
+    )
+
+    pie_plots_div = plot(
+        pie_plots,
+        output_type='div',
+        show_link=False,
+        link_text='',
+        config=dict(
+            displayModeBar=False
+        )
+    )
+
+    ######################################################################
+
+    # Convert the data frame to a list of dictionaries where
+    # each dictionary in the list is a data frame row
+    # Note: This is used if one wants to loop over the data frame's rows
+    # Run this just before the context dictionary is defined!
+
+    # Modify date column
+
+    data['date'] = data['date'].dt.strftime('%a, %d-%b-%Y')
+
+    # Remove unnecessary columns
+
+    data.drop(labels=['year', 'month', 'week', 'day'], axis=1, inplace=True)
+
+    # Convert data frame to dictionary
+
+    data = data.to_dict(orient='records')
+
+    ######################################################################
+
+    context = {
+        'title' : 'Workout log',
+        'stats' : stats,
+        'fig_div' : fig_div,
+        'pie_plots_div' : pie_plots_div
+    }
+
+    return render(request, 'workouts/statistics.html', context)

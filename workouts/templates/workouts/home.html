@@ -2,55 +2,14 @@
 
 {% block content %}
 
-    <!-- Workout stats -->
-
-    <div class="table-responsive">
-        <table class="table table-sm" id='workout_stats'>
-
-            <thead>
-                <tr>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Days</th>
-                    <th>Workouts (count)</th>
-                    <th>Workouts (%)</th>
-                    <th>Rest (count)</th>
-                    <th>Rest (%)</th>
-                    <th>Runs (count)</th>
-                    <th>Runs (%)</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for row in stats %}
-                <tr>
-                    <td>{{ row.from }}</td>
-                    <td>{{ row.to }}</td>
-                    <td>{{ row.days }}</td>
-                    <td>{{ row.workouts }}</td>
-                    <td>{{ row.workouts_prop }}</td>
-                    <td>{{ row.rest }}</td>
-                    <td>{{ row.rest_prop }}</td>
-                    <td>{{ row.runs }}</td>
-                    <td>{{ row.runs_prop }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-
-        </table>
-    </div>
-    <!-- table-responsive -->
-
-    <br>
-
     <!-- Workout log -->
 
     <div class="table-responsive">
-        <table class="table table-sm" id='workout_log'>
+        <table class="table table-striped table-sm" id='workout_log'>
 
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th>#</th>
                     <th>Date</th>
                     <th>Workout</th>
                     <th>Duration (mins)</th>
@@ -79,15 +38,5 @@
         </table>
     </div>
     <!-- table-responsive -->
-
-    <!-- Graphs and plots -->
-
-    {% autoescape off %}
-        {{ fig_div }}
-    {% endautoescape %}
-
-    {% autoescape off %}
-        {{ pie_plots_div }}
-    {% endautoescape %}
 
 {% endblock %}
