@@ -219,7 +219,7 @@ a.article-title:hover {
     text-align: center;
     vertical-align: middle;
     border-collapse: collapse;
-    display: none; /* when using JS $('#workout_log').show(); */
+    /* display: none; /* when using JS $('#workout_log').show(); */
 }
 
 #run_log th {

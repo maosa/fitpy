@@ -11,6 +11,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 ) # class-based views
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Workout
 
 import pandas as pd
@@ -46,7 +47,7 @@ class WorkoutListView(ListView):
     # Change how the variable we loop over (in home.html) is named
     context_object_name = 'objects'
     # Change the database query order (descending)
-    ordering = ['-date'] # use date for ascending order
+    ordering = ['-date'] # use date (without the minus sign) for ascending order
     # Add pagination
     paginate_by = 15
 
@@ -256,265 +257,293 @@ class WorkoutDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 # RUNS TAB
 
-def runs(request):
+class RunListView(ListView):
 
-    # Define functions
+    model = Workout
 
-    def pace(dur, dist):
-        pace_tmp = dur/dist
-        pace_m = pace_tmp.astype(int)
-        pace_s = [
-            round((int(str(x).split('.')[1])/(10**(len(str(x).split('.')[1])))) * 0.6, 2) for x in list(pace_tmp)
-        ]
-        pace = pace_m + pace_s
-        del pace_tmp, pace_m, pace_s
-        return(round(pace, 2))
+    template_name = 'workouts/runs.html'
 
-    def pace_avg(dur, dist):
-        pace_tmp = dur/dist
-        pace_m = pace_tmp.astype(int)
-        pace_s = [(int(str(x).split('.')[1])/(10**(len(str(x).split('.')[1])))) for x in list(pace_tmp)]
-        pace = (pace_m + pace_s).mean()
-        pace_m = int(pace)
-        pace_s = round((int(str(pace).split('.')[1])/(10**(len(str(pace).split('.')[1]))) * 0.6), 2)
-        mean_pace = pace_m + pace_s
-        del pace_tmp, pace_m, pace_s
-        return(mean_pace)
+    # Add extra context
 
-    # Get data
+    def get_context_data(self, **kwargs):
 
-    data = pd.DataFrame(list(Workout.objects.all().values()))
+        # Call the base implementation first to get a context
 
-    run = pd.DataFrame(list(Workout.objects.filter(workout='Running').values()))
+        context = super().get_context_data(**kwargs)
 
-    # Convert colnames to lowercase
+        # Define functions
 
-    data.columns = [x.lower() for x in list(data.columns)]
+        def pace(dur, dist):
+            pace_tmp = dur/dist
+            pace_m = pace_tmp.astype(int)
+            pace_s = [
+                round((int(str(x).split('.')[1])/(10**(len(str(x).split('.')[1])))) * 0.6, 2) for x in list(pace_tmp)
+            ]
+            pace = pace_m + pace_s
+            del pace_tmp, pace_m, pace_s
+            return(round(pace, 2))
 
-    run.columns = [x.lower() for x in list(run.columns)]
+        def pace_avg(dur, dist):
+            pace_tmp = dur/dist
+            pace_m = pace_tmp.astype(int)
+            pace_s = [(int(str(x).split('.')[1])/(10**(len(str(x).split('.')[1])))) for x in list(pace_tmp)]
+            pace = (pace_m + pace_s).mean()
+            pace_m = int(pace)
+            pace_s = round((int(str(pace).split('.')[1])/(10**(len(str(pace).split('.')[1]))) * 0.6), 2)
+            mean_pace = pace_m + pace_s
+            del pace_tmp, pace_m, pace_s
+            return(mean_pace)
 
-    # Convert date column to datetime
+        # Get data
 
-    data['date'] = pd.to_datetime(data['date'], format='%Y-%m-%d')
+        data = pd.DataFrame(list(Workout.objects.all().values()))
 
-    run['date'] = pd.to_datetime(run['date'], format='%Y-%m-%d')
+        run = pd.DataFrame(list(Workout.objects.filter(workout='Running').values()))
 
-    # Calculate pace
+        # Convert colnames to lowercase
 
-    run['pace'] = pace(run['duration'], run['distance'])
+        data.columns = [x.lower() for x in list(data.columns)]
 
-    ######################################################################
+        run.columns = [x.lower() for x in list(run.columns)]
 
-    # Stats
+        # Convert date column to datetime
 
-    if ((datetime.date(data['date'].iloc[-1]) - datetime.date(data['date'].iloc[0])).days + 1 == len(data)):
-        days = len(data)
-    else:
-        days = 'ERROR'
+        data['date'] = pd.to_datetime(data['date'], format='%Y-%m-%d')
 
-    runs = len(run)
+        run['date'] = pd.to_datetime(run['date'], format='%Y-%m-%d')
 
-    runs_prop = round((runs/days)*100, 2)
+        # Calculate pace
 
-    stats = [{
-        'from' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[0],
-        'to' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[-1],
-        'days' : days,
-        'runs' : runs,
-        'runs_prop' : runs_prop,
-        'mean_dist' : round(run['distance'].mean(), 2),
-        'mean_dur' : round(run['duration'].mean(), 2),
-        'mean_pace' : pace_avg(dur=run.duration, dist=run.distance)
-    }]
+        run['pace'] = pace(run['duration'], run['distance'])
 
-    ######################################################################
+        ######################################################################
 
-    # Generate run plots
+        # Stats
 
-    # Calculate variables needed for the plots
+        if ((datetime.date(data['date'].iloc[-1]) - datetime.date(data['date'].iloc[0])).days + 1 == len(data)):
+            days = len(data)
+        else:
+            days = 'ERROR'
 
-    first_date = run['date'].iloc[0]
-    last_date = run['date'].iloc[-1]
-    mean_distance = run['distance'].mean()
-    mean_duration = run['duration'].mean()
-    mean_pace = run['pace'].mean()
+        runs = len(run)
 
-    run_plots = make_subplots(
-        rows=3,
-        cols=1,
-        specs=[
-            [{}],
-            [{}],
-            [{}]
-        ],
-        subplot_titles=('Distance per run',
-                        'Duration per run',
-                        'Pace per run'),
-        vertical_spacing=0.1
-    )
+        runs_prop = round((runs/days)*100, 2)
 
-    # Plot 1
+        stats = [{
+            'from' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[0],
+            'to' : data['date'].dt.strftime('%a, %d-%b-%Y').iloc[-1],
+            'days' : days,
+            'runs' : runs,
+            'runs_prop' : runs_prop,
+            'mean_dist' : round(run['distance'].mean(), 2),
+            'mean_dur' : round(run['duration'].mean(), 2),
+            'mean_pace' : pace_avg(dur=run.duration, dist=run.distance)
+        }]
 
-    run_plots.add_trace(
-        go.Scatter(
-            x=run['date'],
-            y=run['distance'],
-            mode='lines',
-            name='',
-            line=dict(width=1),
-            showlegend=False
-        ),
-        row=1,
-        col=1
-    )
+        ######################################################################
 
-    # Horizontal line at average (plot 1)
+        # Generate run plots
 
-    run_plots.add_shape(
-        type='line',
-        x0=first_date,
-        y0=mean_distance,
-        x1=last_date,
-        y1=mean_distance,
-        line=dict(
-            color='#000000',
-            width=1,
-            dash='dash',
-        ),
-        row=1,
-        col=1
-    )
+        # Calculate variables needed for the plots
 
-    # Add text on the horizontal line (plot 1)
+        first_date = run['date'].iloc[0]
+        last_date = run['date'].iloc[-1]
+        mean_distance = run['distance'].mean()
+        mean_duration = run['duration'].mean()
+        mean_pace = run['pace'].mean()
 
-    run_plots.add_trace(
-        go.Scatter(
-            x=[last_date - pd.DateOffset(60)],
-            y=[mean_distance + 0.5],
-            text=[round(mean_distance, 2)],
-            textposition='top left',
-            mode="text",
-            showlegend=False,
-            hoverinfo='none'
-        ),
-        row=1,
-        col=1
-    )
-
-    # Plot 2
-
-    run_plots.add_trace(
-        go.Scatter(
-            x=run['date'],
-            y=run['duration'],
-            mode='lines',
-            name='',
-            line=dict(width=1),
-            showlegend=False
-        ),
-        row=2,
-        col=1
-    )
-
-    # Horizontal line at average (plot 2)
-
-    run_plots.add_shape(
-        type='line',
-        x0=first_date,
-        y0=mean_duration,
-        x1=last_date,
-        y1=mean_duration,
-        line=dict(
-            color='#000000',
-            width=1,
-            dash='dash',
-        ),
-        row=2,
-        col=1
-    )
-
-    # Add text on the horizontal line (plot 2)
-
-    run_plots.add_trace(
-        go.Scatter(
-            x=[last_date - pd.DateOffset(60)],
-            y=[mean_duration + 2],
-            text=[round(mean_duration, 2)],
-            textposition='top left',
-            mode="text",
-            showlegend=False,
-            hoverinfo='none'
-        ),
-        row=2,
-        col=1
-    )
-
-    # Plot 3
-
-    run_plots.add_trace(
-        go.Scatter(
-            x=run['date'],
-            y=run['pace'],
-            mode='lines',
-            name='',
-            line=dict(width=1),
-            showlegend=False
-        ),
-        row=3,
-        col=1
-    )
-
-    # Update xaxis properties
-
-    run_plots.update_xaxes(title_text='Date', row=3, col=1)
-
-    # Update yaxis properties
-
-    run_plots.update_yaxes(title_text='Distance (km)', row=1, col=1)
-
-    run_plots.update_yaxes(title_text='Duration (mins)', row=2, col=1)
-
-    run_plots.update_yaxes(title_text='Pace (mins/km)', row=3, col=1)
-
-    # Update layout
-
-    run_plots.update_layout(
-        height=900,
-        font=dict(
-            family='Helvetica, monospace',
-            size=16,
-            color="#000000"
+        run_plots = make_subplots(
+            rows=3,
+            cols=1,
+            specs=[
+                [{}],
+                [{}],
+                [{}]
+            ],
+            subplot_titles=('Distance per run',
+                            'Duration per run',
+                            'Pace per run'),
+            vertical_spacing=0.1
         )
-    )
 
-    run_plots_div = plot(
-        run_plots,
-        output_type='div',
-        show_link=False,
-        link_text='',
-        config=dict(
-            displayModeBar=False
+        # Plot 1
+
+        run_plots.add_trace(
+            go.Scatter(
+                x=run['date'],
+                y=run['distance'],
+                mode='lines',
+                name='',
+                line=dict(width=1),
+                showlegend=False
+            ),
+            row=1,
+            col=1
         )
-    )
 
-    # Convert date column from datetime to string
+        # Horizontal line at average (plot 1)
 
-    run['date'] = run['date'].dt.strftime('%a, %d-%b-%Y')
+        run_plots.add_shape(
+            type='line',
+            x0=first_date,
+            y0=mean_distance,
+            x1=last_date,
+            y1=mean_distance,
+            line=dict(
+                color='#000000',
+                width=1,
+                dash='dash',
+            ),
+            row=1,
+            col=1
+        )
 
-    # Convert data frame to dictionary
+        # Add text on the horizontal line (plot 1)
 
-    run = run.to_dict(orient='records')
+        run_plots.add_trace(
+            go.Scatter(
+                x=[last_date - pd.DateOffset(60)],
+                y=[mean_distance + 0.5],
+                text=[round(mean_distance, 2)],
+                textposition='top left',
+                mode="text",
+                showlegend=False,
+                hoverinfo='none'
+            ),
+            row=1,
+            col=1
+        )
 
-    ######################################################################
+        # Plot 2
 
-    context = {
-        'title' : 'Running log',
-        'stats' : stats,
-        'run' : run,
-        'run_plots_div' : run_plots_div
-    }
+        run_plots.add_trace(
+            go.Scatter(
+                x=run['date'],
+                y=run['duration'],
+                mode='lines',
+                name='',
+                line=dict(width=1),
+                showlegend=False
+            ),
+            row=2,
+            col=1
+        )
 
-    return render(request, 'workouts/runs.html', context)
+        # Horizontal line at average (plot 2)
+
+        run_plots.add_shape(
+            type='line',
+            x0=first_date,
+            y0=mean_duration,
+            x1=last_date,
+            y1=mean_duration,
+            line=dict(
+                color='#000000',
+                width=1,
+                dash='dash',
+            ),
+            row=2,
+            col=1
+        )
+
+        # Add text on the horizontal line (plot 2)
+
+        run_plots.add_trace(
+            go.Scatter(
+                x=[last_date - pd.DateOffset(60)],
+                y=[mean_duration + 2],
+                text=[round(mean_duration, 2)],
+                textposition='top left',
+                mode="text",
+                showlegend=False,
+                hoverinfo='none'
+            ),
+            row=2,
+            col=1
+        )
+
+        # Plot 3
+
+        run_plots.add_trace(
+            go.Scatter(
+                x=run['date'],
+                y=run['pace'],
+                mode='lines',
+                name='',
+                line=dict(width=1),
+                showlegend=False
+            ),
+            row=3,
+            col=1
+        )
+
+        # Update xaxis properties
+
+        run_plots.update_xaxes(title_text='Date', row=3, col=1)
+
+        # Update yaxis properties
+
+        run_plots.update_yaxes(title_text='Distance (km)', row=1, col=1)
+
+        run_plots.update_yaxes(title_text='Duration (mins)', row=2, col=1)
+
+        run_plots.update_yaxes(title_text='Pace (mins/km)', row=3, col=1)
+
+        # Update layout
+
+        run_plots.update_layout(
+            height=900,
+            font=dict(
+                family='Helvetica, monospace',
+                size=16,
+                color="#000000"
+            )
+        )
+
+        run_plots_div = plot(
+            run_plots,
+            output_type='div',
+            show_link=False,
+            link_text='',
+            config=dict(
+                displayModeBar=False
+            )
+        )
+
+        # Convert date column from datetime to string
+
+        # run['date'] = run['date'].dt.strftime('%a, %d-%b-%Y')
+
+        # Convert data frame to dictionary
+
+        # run = run.to_dict(orient='records')
+
+        ######################################################################
+
+        # Paginate
+        # https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html
+
+        paginator = Paginator(Workout.objects.filter(workout='Running').order_by('-date'), 15)
+
+        page = self.request.GET.get('page', '1')
+
+        try:
+            page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        ######################################################################
+
+        # Define the context
+
+        context['title'] = 'Running log'
+        context['stats'] = stats
+        context['page_obj'] = page_obj
+        context['run_plots_div'] = run_plots_div
+
+        return context
 
 ####################################################################################################
 ####################################################################################################

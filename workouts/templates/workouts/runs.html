@@ -44,11 +44,11 @@
     <!-- Running log -->
 
     <div class="table-responsive">
-        <table class="table table-sm" id='run_log'>
+        <table class="table table-striped table-sm" id='run_log'>
 
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>ID</th>
                     <th>Date</th>
                     <th>Distance (km)</th>
                     <th>Duration (mins)</th>
@@ -57,10 +57,10 @@
             </thead>
 
             <tbody>
-                {% for row in run %}
+                {% for row in page_obj %}
                 <tr>
                     <td>{{ row.id }}</td>
-                    <td>{{ row.date }}</td>
+                    <td>{{ row.date|date:"D, d-M-Y" }}</td>
                     <td>{{ row.distance|floatformat:2 }}</td>
                     <td>{{ row.duration }}</td>
                     <td>{{ row.pace|floatformat:2 }}</td>
@@ -71,6 +71,35 @@
         </table>
     </div>
     <!-- table-responsive -->
+
+    <!-- Pagination links -->
+    <!-- https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html -->
+
+    {% if page_obj.has_other_pages %} <!-- if there are multiple pages -->
+
+        {% if page_obj.has_previous %} <!-- page_obj is the page object that got passed into the template -->
+            <a class="btn btn-outline-info mb-2 mt-2" href="?page=1">First</a> <!-- go to first page -->
+            <a class="btn btn-outline-info mb-2 mt-2" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <!-- Display a certain number of pages around the current page -->
+        <!-- Loop over all the pages -->
+        {% for num in page_obj.paginator.page_range %}
+            <!-- Check that we are on the current page -->
+            {% if page_obj.number == num %}
+                <a class="btn btn-info mb-2 mt-2" href="?page={{ num }}">{{ num }}</a> <!-- go to current page -->
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="btn btn-outline-info mb-2 mt-2" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %} <!-- page_obj is the page object that got passed into the template -->
+            <a class="btn btn-outline-info mb-2 mt-2" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-2 mt-2" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+
+    {% endif %}
+    <!-- if this page is paginated -->
 
     <!-- Graphs and plots -->
 

@@ -20,5 +20,5 @@ urlpatterns = [
     # A form is used to confirm deletion of a workout - workout_confirm_delete.html
     path('workout/<int:pk>/delete/', views.WorkoutDeleteView.as_view(), name='workout-delete'),
     path('statistics/', views.statistics, name='workouts-statistics'),
-    path('runs/', views.runs, name='workouts-runs')
+    path('runs/', views.RunListView.as_view(), name='workouts-runs')
 ]

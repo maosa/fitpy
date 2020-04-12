@@ -9,7 +9,7 @@
 
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>ID</th>
                     <th>Date</th>
                     <th>Workout</th>
                     <th>Duration (mins)</th>
@@ -42,6 +42,7 @@
     <!-- table-responsive -->
 
     <!-- Pagination links -->
+
     {% if is_paginated %} <!-- if this page is paginated -->
 
         {% if page_obj.has_previous %} <!-- page_obj is the page object that got passed into the template -->
