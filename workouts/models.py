@@ -37,7 +37,7 @@ class Workout(models.Model):
     def __str__(self):
         return 'workout ' + str(self.id) # def __str__(self) must return a string
 
-    # Redirect the user to the detail view of the new workout after the post has been created
+    # Redirect the user to the detail view of the new workout after the workout has been added
     # Return the URL as a string and let the view handle the redirect for us
     # Alternatively see ~ minute 30
     # https://www.youtube.com/watch?v=-s7e_Fy6NRU&list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p&index=10

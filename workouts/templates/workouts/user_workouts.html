@@ -1,5 +1,7 @@
 {% extends 'workouts/base.html' %}
 
+<!-- Show workouts for a specific user -->
+
 {% block content %}
 
     <h2 class="mb-3">Workouts by {{ view.kwargs.username }} ({{ page_obj.paginator.count }} entries)</h2>
