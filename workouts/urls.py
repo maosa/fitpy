@@ -11,6 +11,7 @@ urlpatterns = [
     # views.home is the home function from views.py (this returns the HttpResponse)
     # path('', views.home, name='workouts-home'),
     path('', views.WorkoutListView.as_view(), name='workouts-home'), # use class-based views
+    path('user/<str:username>/', views.UserWorkoutListView.as_view(), name='user-workouts'),
     # Add a route for specific, individual posts (pk = primary key)
     path('workout/<int:pk>/', views.WorkoutDetailView.as_view(), name='workout-detail'),
     path('workout/new/', views.WorkoutCreateView.as_view(), name='workout-create'),

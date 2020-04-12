@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import (
     LoginRequiredMixin, # user must be logged in to add a new workout
     UserPassesTestMixin # only original workout users can update their logged workouts
 )
+from django.contrib.auth.models import User
 from django.views.generic import (
     ListView,
     DetailView,
@@ -46,6 +47,22 @@ class WorkoutListView(ListView):
     context_object_name = 'objects'
     # Change the database query order (descending)
     ordering = ['-date'] # use date for ascending order
+    # Add pagination
+    paginate_by = 15
+
+####################################################################################################
+
+# Class for showing workouts for just one user (click on username on the workouts table)
+
+class UserWorkoutListView(ListView):
+    model = Workout
+    template_name = 'workouts/user_workouts.html'
+    context_object_name = 'objects'
+    paginate_by = 15
+    def get_queryset(self):
+        # Get username from the URL (if user exists) otherwise return a 404
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        return Workout.objects.filter(user=user).order_by('-date')
 
 ####################################################################################################
 

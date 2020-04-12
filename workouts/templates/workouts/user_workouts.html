@@ -2,6 +2,8 @@
 
 {% block content %}
 
+    <h2 class="mb-3">Workouts by {{ view.kwargs.username }} ({{ page_obj.paginator.count }} entries)</h2>
+
     <!-- Workout log -->
 
     <div class="table-responsive">
@@ -15,7 +17,6 @@
                     <th>Duration (mins)</th>
                     <th>Distance (km)</th>
                     <th>Pace (mins/km)</th>
-                    <!-- <th>Category</th> -->
                     <th>User</th>
                 </tr>
             </thead>
@@ -29,7 +30,6 @@
                     <td>{{ obj.duration }}</td>
                     <td>{{ obj.distance|floatformat:2 }}</td>
                     <td>{{ obj.pace|floatformat:2 }}</td>
-                    <!-- <td>{{ obj.category }}</td> -->
                     <td>
                         <a class="article-title" href="{% url 'user-workouts' obj.user.username %}">{{ obj.user }}</a>
                     </td>

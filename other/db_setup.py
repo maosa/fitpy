@@ -172,3 +172,15 @@ from workouts.models import Workout
 from django.contrib.auth.models import User
 
 Workout.objects.filter(workout='Running')
+
+################################################################################
+################################################################################
+
+# Remove a table from the database
+
+python manage.py dbshell
+
+DROP TABLE workouts_workout;
+
+################################################################################
+################################################################################

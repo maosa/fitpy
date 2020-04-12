@@ -9,7 +9,7 @@
     <div class="media-body">
 
         <div class="article-metadata">
-            <a class="mr-2" href="{% url 'profile' %}">{{ object.user }}</a>
+            <a class="mr-2" href="{% url 'user-workouts' object.user.username %}">{{ object.user }}</a>
             <small class="text-muted">{{ object.date }}</small>
             <!-- If surrently logged in user is the original workout author -->
             {% if object.user == user %}
