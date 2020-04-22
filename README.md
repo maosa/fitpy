@@ -9,33 +9,33 @@
 
 ## Workouts tab
 
-![workouts_1](readme_images/workouts_1.png)
+![workouts_1](app_screenshots/workouts_1.png)
 
-![workouts_2](readme_images/workouts_2.png)
+![workouts_2](app_screenshots/workouts_2.png)
 
-![workouts_3](readme_images/workouts_3.png)
+![workouts_3](app_screenshots/workouts_3.png)
 
-![workouts_4](readme_images/workouts_4.png)
+![workouts_4](app_screenshots/workouts_4.png)
 
 ## Runs tab
 
-![runs_1](readme_images/runs_1.png)
+![runs_1](app_screenshots/runs_1.png)
 
-![runs_2](readme_images/runs_2.png)
+![runs_2](app_screenshots/runs_2.png)
 
-![runs_3](readme_images/runs_3.png)
+![runs_3](app_screenshots/runs_3.png)
 
 ## Record a new workout
 
-![new_workout](readme_images/new_workout.png)
+![new_workout](app_screenshots/new_workout.png)
 
 ## User registration page
 
-![user_registration](readme_images/user_registration.png)
+![user_registration](app_screenshots/user_registration.png)
 
 ## User login page
 
-![user_login](readme_images/user_login.png)
+![user_login](app_screenshots/user_login.png)
 
 <br/>
 <hr/>
