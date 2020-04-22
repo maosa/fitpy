@@ -2,6 +2,47 @@
 
 {% block content %}
 
+    <!-- Workout stats -->
+
+    <div class="table-responsive">
+        <table class="table table-sm" id='workout_stats'>
+
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Days</th>
+                    <th>Workouts (count)</th>
+                    <th>Workouts (%)</th>
+                    <th>Rest (count)</th>
+                    <th>Rest (%)</th>
+                    <th>Cardio (count)</th>
+                    <th>Cardio (%)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in stats %}
+                <tr>
+                    <td>{{ row.from|date:"D, d-M-Y" }}</td>
+                    <td>{{ row.to|date:"D, d-M-Y" }}</td>
+                    <td>{{ row.days }}</td>
+                    <td>{{ row.workouts }}</td>
+                    <td>{{ row.workouts_prop }}</td>
+                    <td>{{ row.rest }}</td>
+                    <td>{{ row.rest_prop }}</td>
+                    <td>{{ row.cardio }}</td>
+                    <td>{{ row.cardio_prop }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+    <!-- table-responsive -->
+
+    <br>
+
     <!-- Workout log -->
 
     <div class="table-responsive">
@@ -13,25 +54,25 @@
                     <th>Date</th>
                     <th>Workout</th>
                     <th>Duration (mins)</th>
-                    <th>Distance (km)</th>
-                    <th>Pace (mins/km)</th>
+                    <!-- <th>Distance (km)</th> -->
+                    <!-- <th>Pace (mins/km)</th> -->
                     <!-- <th>Category</th> -->
                     <th>User</th>
                 </tr>
             </thead>
 
             <tbody>
-                {% for obj in objects %}
+                {% for row in page_obj %}
                 <tr>
-                    <td><a class="article-title" href="{% url 'workout-detail' obj.id %}">{{ obj.id }}</a></td>
-                    <td>{{ obj.date|date:"D, d-M-Y" }}</td>
-                    <td>{{ obj.workout }}</td>
-                    <td>{{ obj.duration }}</td>
-                    <td>{{ obj.distance|floatformat:2 }}</td>
-                    <td>{{ obj.pace|floatformat:2 }}</td>
-                    <!-- <td>{{ obj.category }}</td> -->
+                    <td><a class="article-title" href="{% url 'workout-detail' row.id %}">{{ row.id }}</a></td>
+                    <td>{{ row.date|date:"D, d-M-Y" }}</td>
+                    <td>{{ row.workout }}</td>
+                    <td>{{ row.duration }}</td>
+                    <!-- <td>{{ row.distance|floatformat:2 }}</td> -->
+                    <!-- <td>{{ row.pace|floatformat:2 }}</td> -->
+                    <!-- <td>{{ row.category }}</td> -->
                     <td>
-                        <a class="article-title" href="{% url 'user-workouts' obj.user.username %}">{{ obj.user }}</a>
+                        <a class="article-title" href="{% url 'user-workouts' row.user.username %}">{{ row.user }}</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -43,7 +84,7 @@
 
     <!-- Pagination links -->
 
-    {% if is_paginated %} <!-- if this page is paginated -->
+    {% if page_obj.has_other_pages %} <!-- if this page is paginated; can also use `if is_paginated` -->
 
         {% if page_obj.has_previous %} <!-- page_obj is the page object that got passed into the template -->
             <a class="btn btn-outline-info mb-4 mt-2" href="?page=1">First</a> <!-- go to first page -->
@@ -68,5 +109,15 @@
 
     {% endif %}
     <!-- if this page is paginated -->
+
+    <!-- Graphs and plots -->
+
+    {% autoescape off %}
+        {{ fig_div }}
+    {% endautoescape %}
+
+    {% autoescape off %}
+        {{ pie_plots_div }}
+    {% endautoescape %}
 
 {% endblock %}

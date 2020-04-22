@@ -23,8 +23,8 @@
             <tbody>
                 {% for row in stats %}
                 <tr>
-                    <td>{{ row.from }}</td>
-                    <td>{{ row.to }}</td>
+                    <td>{{ row.from|date:"D, d-M-Y" }}</td>
+                    <td>{{ row.to|date:"D, d-M-Y" }}</td>
                     <td>{{ row.days }}</td>
                     <td>{{ row.runs }}</td>
                     <td>{{ row.runs_prop }}</td>
@@ -53,6 +53,7 @@
                     <th>Distance (km)</th>
                     <th>Duration (mins)</th>
                     <th>Pace (mins/km)</th>
+                    <th>User</th>
                 </tr>
             </thead>
 
@@ -64,6 +65,9 @@
                     <td>{{ row.distance|floatformat:2 }}</td>
                     <td>{{ row.duration }}</td>
                     <td>{{ row.pace|floatformat:2 }}</td>
+                    <td>
+                        <a class="article-title" href="{% url 'user-workouts' row.user.username %}">{{ row.user }}</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
