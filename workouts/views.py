@@ -514,7 +514,7 @@ class WorkoutCreateView(LoginRequiredMixin, CreateView):
 
         distance = form.cleaned_data.get('distance')
 
-        if form.cleaned_data.get('workout') == 'Running' and distance > 0:
+        if form.cleaned_data.get('workout') in ['Running', 'Cycling'] and distance > 0:
             form.instance.pace = pace(
                 dur=form.cleaned_data.get('duration'),
                 dist=form.cleaned_data.get('distance')
@@ -582,7 +582,7 @@ class WorkoutUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         distance = form.cleaned_data.get('distance')
 
-        if form.cleaned_data.get('workout') == 'Running' and distance > 0:
+        if form.cleaned_data.get('workout') in ['Running', 'Cycling'] and distance > 0:
             form.instance.pace = pace(
                 dur=form.cleaned_data.get('duration'),
                 dist=form.cleaned_data.get('distance')
