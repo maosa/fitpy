@@ -75,7 +75,8 @@ class WorkoutListView(ListView):
 
         data['month'] = data['date'].dt.month
 
-        data['week'] = data['date'].dt.week
+        # data['week'] = data['date'].dt.week # deprecated
+        data['week'] = data['date'].dt.isocalendar().week
 
         data['day'] = data['date'].dt.day
 
