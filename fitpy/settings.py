@@ -25,11 +25,10 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'i+5pcklm(o^&2d+q_rh=+o!78_^32v
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = False
-# DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 # https://stackoverflow.com/questions/24857158/commanderror-you-must-set-settings-allowed-hosts-if-debug-is-false/27792097
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'fitpy.herokuapp.com']
 
 # Application definition
 
