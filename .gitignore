@@ -1,6 +1,7 @@
 ###################
 # Compiled source #
 ###################
+
 *.com
 *.class
 *.dll
@@ -11,8 +12,9 @@
 ############
 # Packages #
 ############
-# it's better to unpack these files and commit the raw source
-# git has its own built in compression methods
+# It's better to unpack these files and commit the raw source
+# Git has its own built in compression methods
+
 *.7z
 *.dmg
 *.gz
@@ -25,6 +27,7 @@
 ######################
 # Logs and databases #
 ######################
+
 *.log
 #*.sql
 #*.sqlite
@@ -32,6 +35,7 @@
 ######################
 # OS generated files #
 ######################
+
 .DS_Store
 .DS_Store?
 ._*
@@ -43,5 +47,12 @@ Thumbs.db
 #######################
 # User selected files #
 #######################
+
 #__pycache__
 .ipynb_checkpoints
+
+#####################
+# Text backup files #
+#####################
+
+*.bak
