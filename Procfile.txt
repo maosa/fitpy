@@ -1,1 +1,1 @@
-web: gunicorn fitpy.wsgi --log-file -
+web: gunicorn fitpy.wsgi
