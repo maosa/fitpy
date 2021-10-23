@@ -163,6 +163,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Deployment
 # https://codeburst.io/deploy-your-django-project-for-free-140d73a2c76b
 
+# How to update an already deployed Heroku project
+# https://dev.to/jessesbyers/how-to-update-a-deployed-app-on-heroku-3fde
+
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
