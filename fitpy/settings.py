@@ -123,6 +123,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Simplified static file serving (optional)
+# https://warehouse.python.org/project/whitenoise/
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE =  'django.contrib.staticfiles.storage.StaticFilesStorage'
+
 # After a user logs in, direct him/her to the home page
 
 LOGIN_REDIRECT_URL = 'workouts-home'
@@ -170,17 +178,5 @@ import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-# The absolute path to the directory where collectstatic will collect static files for deployment.
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Simplified static file serving (optional)
-# https://warehouse.python.org/project/whitenoise/
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# STATICFILES_STORAGE =  'django.contrib.staticfiles.storage.StaticFilesStorage'
-
 import django_heroku
-
 django_heroku.settings(locals())

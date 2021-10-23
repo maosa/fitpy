@@ -1,0 +1,246 @@
+/* Globally defined variables */
+
+:root {
+    --navbar_header_size: 20px;
+    --navbar_height: 70px;
+    --left_padding: 20px;
+}
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    /* margin: 0px; */
+    /* padding: 0px; */
+    /* line-style: none; */
+    /* text-decoration: none; */
+    /* overflow-x: hidden; */
+}
+
+/* We're working with the body tag, and so with the WHOLE page */
+
+body {
+    /* background-color: #F0F0F0; */
+    font-size: 0.875rem;
+}
+
+/* #################### NAVBAR #################### */
+
+/* Navbar header */
+
+.navbar-brand {
+    font-size: var(--navbar_header_size);
+    font-weight: bold;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: var(--left_padding);
+    background-color: rgba(0, 0, 0, 0.25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
+}
+
+#new_workout {
+    margin-left: 24px;
+}
+
+/* #################### SIDEBAR #################### */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* place sidebar behind the navbar */
+    padding: var(--navbar_height) 0 0; /* navbar height */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - var(--navbar_height));
+    padding-top: 0.5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* scrollable contents if viewport is shorter than content */
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+    .sidebar-sticky {
+        position: -webkit-sticky;
+        position: sticky;
+    }
+}
+
+/* Sidebar items */
+
+.sidebar .nav-link {
+    font-size: calc(var(--navbar_header_size) - 5px);
+    color: #333333;
+    padding-left: var(--left_padding);
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Add space between the icon and the text in the sidebar items */
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+}
+
+/* Make sidebar items move/jump with mouse hovering */
+
+.sidebar ul li:hover a {
+    color: #007bff;
+    padding-left: 35px
+}
+
+/* #################### MAIN PAGE #################### */
+
+[role="main"] {
+    padding-top: var(--navbar_height); /* space for fixed navbar */
+}
+
+/* #################### WORKOUT STATS #################### */
+
+#workout_stats {
+    height: auto;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: #3E3E3E;
+    text-align: center;
+    vertical-align: middle;
+    border-collapse: collapse;
+}
+
+#workout_stats th {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+#workout_stats tr {
+    color: #FFFFFF;
+    /* font-weight: bold; */
+}
+
+/* #################### WORKOUT LOG #################### */
+
+#workout_log {
+    height: auto;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    /* border: 1px solid #000000; */
+    text-align: center;
+    vertical-align: middle;
+    /* background-color: #000000; */
+    border-collapse: collapse;
+}
+
+#workout_log th {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+    /* text-transform: capitalize; */
+}
+
+#workout_log tr {
+    color: #000000;
+}
+
+/* Detailed view for individual workouts */
+
+.content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+
+.article-title {
+    color: #444444;
+}
+
+a.article-title:hover {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.article-content {
+    white-space: pre-line;
+}
+
+.article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+}
+
+.article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3
+}
+
+.article-metadata a:hover {
+    color: #333;
+    text-decoration: none;
+}
+
+/* #################### RUNNING STATS #################### */
+
+#run_stats {
+    height: auto;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: #3E3E3E;
+    text-align: center;
+    vertical-align: middle;
+    border-collapse: collapse;
+}
+
+#run_stats th {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+#run_stats tr {
+    color: #FFFFFF;
+}
+
+/* #################### RUN LOG #################### */
+
+#run_log {
+    height: auto;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+    vertical-align: middle;
+    border-collapse: collapse;
+    /* display: none; /* when using JS $('#workout_log').show(); */
+}
+
+#run_log th {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+#run_log tr {
+    color: #000000;
+}
+
+/* #################### UESR PROFILE #################### */
+
+.account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+}
+
+.account-heading {
+    font-size: 2.5rem;
+}
